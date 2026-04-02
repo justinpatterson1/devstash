@@ -1,16 +1,19 @@
 # Current Feature
 
-## Project Setup & Scaffolding
+## Dashboard UI Phase 1
 
 ### Status: In Progress
 
 ### Goals
-- Clean up default Next.js boilerplate
-- Establish project structure and context files
-- Set up foundational configuration (Tailwind, TypeScript, ESLint)
+- Initialize ShadCN UI and install required components
+- Create dashboard route at `/dashboard`
+- Build main dashboard layout with global styles
+- Dark mode by default
+- Top bar with search and new item button (display only)
+- Placeholder sidebar and main area (h2 with "Sidebar" and "Main")
 
-### Next Steps
-- Install core dependencies (Prisma, NextAuth, shadcn/ui)
-- Set up database schema and Prisma client
-- Create base layout (sidebar + main content area)
-- Implement authentication (Email + GitHub OAuth)
+### References
+- `context/features/dashboard-phase-1-spec.md`
+- `context/screenshots/DashboardUI_1.png`
+- `context/project_overview.md`
+- `src/lib/mock-data.ts`
