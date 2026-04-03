@@ -10,7 +10,7 @@ import {
   File,
   Image,
   Layers,
-  Search,
+  ChevronDown,
   Star,
   FolderOpen,
   Settings,
@@ -64,45 +64,15 @@ export function Sidebar({
         </Button>
       </div>
 
-      {/* All Items */}
-      <div className="px-2">
-        <Link
-          href="/dashboard"
-          className="flex items-center gap-2 rounded-md px-2 py-2.5 text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent"
-        >
-          <Layers className="size-4 shrink-0" />
-          {!collapsed && <span>All Items</span>}
-        </Link>
-      </div>
-
-      {/* Search */}
-      <div className="px-2 mt-2">
-        <Link
-          href="/dashboard"
-          className="flex items-center gap-2 rounded-md px-2 py-2.5 text-sm text-sidebar-foreground hover:bg-sidebar-accent"
-        >
-          <Search className="size-4 shrink-0" />
-          {!collapsed && <span>Search</span>}
-        </Link>
-      </div>
-
-      {/* Favorites */}
-      <div className="px-2 mt-2">
-        <Link
-          href="/dashboard"
-          className="flex items-center gap-2 rounded-md px-2 py-2.5 text-sm text-sidebar-foreground hover:bg-sidebar-accent"
-        >
-          <Star className="size-4 shrink-0" />
-          {!collapsed && <span>Favorites</span>}
-        </Link>
-      </div>
-
-      {/* Item Types */}
-      {!collapsed && (
-        <div className="mt-6 px-2">
-          <p className="mb-1 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Types
-          </p>
+      {/* Navigation header / collapsed type icons */}
+      {!collapsed ? (
+        <div className="px-2">
+          <div className="flex items-center gap-2 px-2 py-2.5">
+            <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Navigation
+            </span>
+          </div>
           <nav className="flex flex-col gap-1">
             {itemTypes.map((type) => {
               const Icon = iconMap[type.icon] ?? Layers;
@@ -123,6 +93,22 @@ export function Sidebar({
             })}
           </nav>
         </div>
+      ) : (
+        <nav className="flex flex-col items-center gap-2 px-2">
+          {itemTypes.map((type) => {
+            const Icon = iconMap[type.icon] ?? Layers;
+            return (
+              <Link
+                key={type.id}
+                href={`/items/${getTypeSlug(type.name)}`}
+                className="flex size-8 items-center justify-center rounded-md hover:bg-sidebar-accent"
+                title={type.name}
+              >
+                <Icon className="size-4" style={{ color: type.color }} />
+              </Link>
+            );
+          })}
+        </nav>
       )}
 
       {/* Favorite Collections */}
@@ -219,44 +205,14 @@ export function SidebarContent() {
 
   return (
     <div className="flex h-full flex-col">
-      {/* All Items */}
+      {/* Navigation */}
       <div className="px-2 pt-2">
-        <Link
-          href="/dashboard"
-          className="flex items-center gap-2 rounded-md px-2 py-2.5 text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent"
-        >
-          <Layers className="size-4 shrink-0" />
-          <span>All Items</span>
-        </Link>
-      </div>
-
-      {/* Search */}
-      <div className="px-2 mt-2">
-        <Link
-          href="/dashboard"
-          className="flex items-center gap-2 rounded-md px-2 py-2.5 text-sm text-sidebar-foreground hover:bg-sidebar-accent"
-        >
-          <Search className="size-4 shrink-0" />
-          <span>Search</span>
-        </Link>
-      </div>
-
-      {/* Favorites */}
-      <div className="px-2 mt-2">
-        <Link
-          href="/dashboard"
-          className="flex items-center gap-2 rounded-md px-2 py-2.5 text-sm text-sidebar-foreground hover:bg-sidebar-accent"
-        >
-          <Star className="size-4 shrink-0" />
-          <span>Favorites</span>
-        </Link>
-      </div>
-
-      {/* Item Types */}
-      <div className="mt-6 px-2">
-        <p className="mb-1 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          Types
-        </p>
+        <div className="flex items-center gap-2 px-2 py-2.5">
+          <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Navigation
+          </span>
+        </div>
         <nav className="flex flex-col gap-1">
           {itemTypes.map((type) => {
             const Icon = iconMap[type.icon] ?? Layers;
