@@ -6,6 +6,25 @@ None
 
 ## History
 
+### Dashboard Items (Live Data)
+- **Status:** Completed
+
+#### Goals
+- Create `src/lib/db/items.ts` with data fetching functions
+- Replace mock data with live Prisma queries for pinned and recent items
+- Fetch items directly in server component
+- Item card icon/border derived from item type
+- Display item type tags and existing card details
+- If no pinned items, hide the pinned section
+- Update stats display
+
+#### References
+- `context/features/dashboard-items-spec.md`
+- `context/screenshots/DashboardUI_1.png`
+- `context/screenshots/DashboardUI_2.png`
+
+---
+
 ### Dashboard Collections (Live Data)
 - **Status:** Completed
 

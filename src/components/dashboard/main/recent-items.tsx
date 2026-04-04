@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { items, itemTypes } from "@/lib/mock-data";
+import type { ItemWithDetails } from "@/lib/db/items";
 
 const iconMap: Record<string, React.ElementType> = {
   Code,
@@ -23,31 +23,38 @@ const iconMap: Record<string, React.ElementType> = {
   Image,
 };
 
-const recentItems = [...items]
-  .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-  .slice(0, 10);
+export function RecentItems({
+  items,
+  totalCount,
+}: {
+  items: ItemWithDetails[];
+  totalCount: number;
+}) {
+  if (items.length === 0) return null;
 
-export function RecentItems() {
   return (
     <section>
       <div className="mb-3 flex items-center justify-between">
         <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
           All Items
         </h2>
-        <span className="text-xs text-muted-foreground">{items.length} items</span>
+        <span className="text-xs text-muted-foreground">{totalCount} items</span>
       </div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {recentItems.map((item) => {
-          const type = itemTypes.find((t) => t.id === item.itemTypeId);
-          const Icon = type ? (iconMap[type.icon] ?? Layers) : Layers;
+      <div className="flex flex-col gap-3">
+        {items.map((item) => {
+          const Icon = iconMap[item.typeIcon] ?? Layers;
           return (
-            <Card key={item.id} className="cursor-pointer transition-colors hover:bg-muted/50">
+            <Card
+              key={item.id}
+              className="cursor-pointer transition-colors hover:bg-muted/50"
+              style={{ borderLeftWidth: "3px", borderLeftColor: item.typeColor }}
+            >
               <CardContent className="p-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-2">
                     <Icon
                       className="size-4 shrink-0"
-                      style={{ color: type?.color }}
+                      style={{ color: item.typeColor }}
                     />
                     <span className="text-sm font-medium">{item.title}</span>
                   </div>
