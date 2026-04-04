@@ -1,23 +1,45 @@
 # Current Feature
 
-## Seed Database with Sample Data
+None
 
-### Status: In Progress
+---
 
-### Goals
+## History
+
+### Dashboard Collections (Live Data)
+- **Status:** Completed
+
+#### Goals
+- Create `src/lib/db/collections.ts` with data fetching functions
+- Replace mock data with live Prisma queries in the collections section
+- Fetch collections directly in server component
+- Collection card border color derived from most-used content type in that collection
+- Show small icons of all types present in each collection
+- Update collection stats display
+- Do not add items underneath yet
+
+#### References
+- `context/features/dashboard-collections-spec.md`
+- `context/screenshots/DashboardUI_1.png`
+- `context/screenshots/DashboardUI_2.png`
+
+---
+
+### Seed Database with Sample Data
+- **Status:** Completed
+
+#### Goals
 - Create seed script at `prisma/seed.ts`
 - Seed a demo user (demo@devstash.io, hashed password)
 - Seed all 7 system item types
 - Seed 5 collections with items: React Patterns, AI Workflows, DevOps, Terminal Commands, Design Resources
 - Associate items with tags and collections
 
-### References
+#### References
 - `context/features/seed-spec.md`
 - `prisma/schema.prisma`
 
 ---
-
-## History
 
 ### Prisma + Neon PostgreSQL Setup
 - **Status:** Completed
