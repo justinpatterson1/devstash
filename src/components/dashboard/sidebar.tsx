@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { itemTypes, collections, currentUser, items } from "@/lib/mock-data";
+import type { SidebarData } from "@/components/dashboard/dashboard-shell";
 
 const iconMap: Record<string, React.ElementType> = {
   Code,
@@ -31,10 +31,6 @@ const iconMap: Record<string, React.ElementType> = {
   Image,
 };
 
-function getItemCountForType(typeId: string) {
-  return items.filter((item) => item.itemTypeId === typeId).length;
-}
-
 function getTypeSlug(name: string) {
   return name.toLowerCase();
 }
@@ -42,15 +38,12 @@ function getTypeSlug(name: string) {
 export function Sidebar({
   collapsed,
   onToggle,
+  data,
 }: {
   collapsed: boolean;
   onToggle: () => void;
+  data: SidebarData;
 }) {
-  const favoriteCollections = collections.filter((c) => c.isFavorite);
-  const recentCollections = [...collections]
-    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-    .slice(0, 5);
-
   return (
     <aside
       className={`flex h-full flex-col border-r border-border bg-sidebar transition-all duration-200 ${
@@ -74,9 +67,8 @@ export function Sidebar({
             </span>
           </div>
           <nav className="flex flex-col gap-1">
-            {itemTypes.map((type) => {
+            {data.itemTypes.map((type) => {
               const Icon = iconMap[type.icon] ?? Layers;
-              const count = getItemCountForType(type.id);
               return (
                 <Link
                   key={type.id}
@@ -87,7 +79,7 @@ export function Sidebar({
                     <Icon className="size-4 shrink-0" style={{ color: type.color }} />
                     <span>{type.name}</span>
                   </span>
-                  <span className="text-xs text-muted-foreground">{count}</span>
+                  <span className="text-xs text-muted-foreground">{type.count}</span>
                 </Link>
               );
             })}
@@ -95,7 +87,7 @@ export function Sidebar({
         </div>
       ) : (
         <nav className="flex flex-col items-center gap-2 px-2">
-          {itemTypes.map((type) => {
+          {data.itemTypes.map((type) => {
             const Icon = iconMap[type.icon] ?? Layers;
             return (
               <Link
@@ -112,13 +104,13 @@ export function Sidebar({
       )}
 
       {/* Favorite Collections */}
-      {!collapsed && favoriteCollections.length > 0 && (
+      {!collapsed && data.favoriteCollections.length > 0 && (
         <div className="mt-6 px-2">
           <p className="mb-1 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Favorites
           </p>
           <nav className="flex flex-col gap-1">
-            {favoriteCollections.map((col) => (
+            {data.favoriteCollections.map((col) => (
               <Link
                 key={col.id}
                 href="/dashboard"
@@ -142,20 +134,29 @@ export function Sidebar({
             Collections
           </p>
           <nav className="flex flex-col gap-1">
-            {recentCollections.map((col) => (
+            {data.recentCollections.map((col) => (
               <Link
                 key={col.id}
                 href="/dashboard"
                 className="flex items-center justify-between rounded-md px-2 py-2.5 text-sm text-sidebar-foreground hover:bg-sidebar-accent"
               >
                 <span className="flex items-center gap-2">
-                  <FolderOpen className="size-4 shrink-0 text-muted-foreground" />
+                  <span
+                    className="size-2.5 shrink-0 rounded-full"
+                    style={{ backgroundColor: col.dominantColor }}
+                  />
                   <span>{col.name}</span>
                 </span>
                 <span className="text-xs text-muted-foreground">{col.itemCount}</span>
               </Link>
             ))}
           </nav>
+          <Link
+            href="/collections"
+            className="mt-2 block px-2 py-1.5 text-xs text-muted-foreground hover:text-foreground"
+          >
+            View all collections
+          </Link>
         </div>
       )}
 
@@ -178,15 +179,15 @@ export function Sidebar({
         <div className="flex items-center gap-2 rounded-md px-2 py-1.5">
           <Avatar className="size-7">
             <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-              {currentUser.name.charAt(0).toUpperCase()}
+              {data.userName.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           {!collapsed && (
             <div className="flex flex-1 flex-col overflow-hidden">
               <span className="truncate text-sm font-medium text-sidebar-foreground">
-                {currentUser.name}
+                {data.userName}
               </span>
-              {!currentUser.isPro && (
+              {!data.isPro && (
                 <span className="text-xs text-muted-foreground">Free Plan</span>
               )}
             </div>
@@ -197,12 +198,7 @@ export function Sidebar({
   );
 }
 
-export function SidebarContent() {
-  const favoriteCollections = collections.filter((c) => c.isFavorite);
-  const recentCollections = [...collections]
-    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-    .slice(0, 5);
-
+export function SidebarContent({ data }: { data: SidebarData }) {
   return (
     <div className="flex h-full flex-col">
       {/* Navigation */}
@@ -214,9 +210,8 @@ export function SidebarContent() {
           </span>
         </div>
         <nav className="flex flex-col gap-1">
-          {itemTypes.map((type) => {
+          {data.itemTypes.map((type) => {
             const Icon = iconMap[type.icon] ?? Layers;
-            const count = getItemCountForType(type.id);
             return (
               <Link
                 key={type.id}
@@ -227,7 +222,7 @@ export function SidebarContent() {
                   <Icon className="size-4 shrink-0" style={{ color: type.color }} />
                   <span>{type.name}</span>
                 </span>
-                <span className="text-xs text-muted-foreground">{count}</span>
+                <span className="text-xs text-muted-foreground">{type.count}</span>
               </Link>
             );
           })}
@@ -235,13 +230,13 @@ export function SidebarContent() {
       </div>
 
       {/* Favorite Collections */}
-      {favoriteCollections.length > 0 && (
+      {data.favoriteCollections.length > 0 && (
         <div className="mt-6 px-2">
           <p className="mb-1 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Favorites
           </p>
           <nav className="flex flex-col gap-1">
-            {favoriteCollections.map((col) => (
+            {data.favoriteCollections.map((col) => (
               <Link
                 key={col.id}
                 href="/dashboard"
@@ -264,20 +259,29 @@ export function SidebarContent() {
           Collections
         </p>
         <nav className="flex flex-col gap-1">
-          {recentCollections.map((col) => (
+          {data.recentCollections.map((col) => (
             <Link
               key={col.id}
               href="/dashboard"
               className="flex items-center justify-between rounded-md px-2 py-2.5 text-sm text-sidebar-foreground hover:bg-sidebar-accent"
             >
               <span className="flex items-center gap-2">
-                <FolderOpen className="size-4 shrink-0 text-muted-foreground" />
+                <span
+                  className="size-2.5 shrink-0 rounded-full"
+                  style={{ backgroundColor: col.dominantColor }}
+                />
                 <span>{col.name}</span>
               </span>
               <span className="text-xs text-muted-foreground">{col.itemCount}</span>
             </Link>
           ))}
         </nav>
+        <Link
+          href="/collections"
+          className="mt-2 block px-2 py-1.5 text-xs text-muted-foreground hover:text-foreground"
+        >
+          View all collections
+        </Link>
       </div>
 
       {/* Spacer */}
@@ -299,14 +303,14 @@ export function SidebarContent() {
         <div className="flex items-center gap-2 rounded-md px-2 py-1.5">
           <Avatar className="size-7">
             <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-              {currentUser.name.charAt(0).toUpperCase()}
+              {data.userName.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-1 flex-col overflow-hidden">
             <span className="truncate text-sm font-medium text-sidebar-foreground">
-              {currentUser.name}
+              {data.userName}
             </span>
-            {!currentUser.isPro && (
+            {!data.isPro && (
               <span className="text-xs text-muted-foreground">Free Plan</span>
             )}
           </div>

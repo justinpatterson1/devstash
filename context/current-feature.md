@@ -1,6 +1,18 @@
 # Current Feature
 
-None
+### Stats & Sidebar (Live Data)
+- **Status:** In Progress
+
+#### Goals
+- Display stats from database data, keeping current design/layout
+- Display item types in sidebar with their icons, linking to /items/[typename]
+- Add "View all collections" link under the collections list that goes to /collections
+- Keep star icons for favorite collections; recents show colored circle based on most-used item type
+- Add database functions to src/lib/db/items.ts
+
+#### References
+- `context/features/stats-sidebar-spec.md`
+- `src/lib/db/collections.ts`
 
 ---
 
