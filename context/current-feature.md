@@ -1,22 +1,32 @@
-# Current Feature: Add Pro Badge to Sidebar
+# Current Feature
 
 ## Status
-In Progress
+Not Started
 
 ## Goals
+<!-- Goals will be added when a feature is loaded -->
+
+## Notes
+<!-- Notes will be added when a feature is loaded -->
+
+---
+
+## History
+
+### Add Pro Badge to Sidebar
+- **Status:** Completed
+
+#### Goals
 - Add a "PRO" badge to the Files type in the sidebar
 - Add a "PRO" badge to the Images type in the sidebar
 - Use the shadcn/ui Badge component
 - Badge should be clean and subtle, with "PRO" in uppercase
 
-## Notes
-- Uses shadcn/ui Badge component (already part of the tech stack)
-- Badge styling should be subtle — not visually dominant
-- Only applies to Files and Images sidebar items
+#### References
+- `context/features/add-pro-badge-sidebar.md`
+- `src/components/dashboard/sidebar.tsx`
 
 ---
-
-## History
 
 ### Stats & Sidebar (Live Data)
 - **Status:** Completed
