@@ -18,8 +18,11 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { SidebarData } from "@/components/dashboard/dashboard-shell";
+
+const proTypes = new Set(["file", "image"]);
 
 const iconMap: Record<string, React.ElementType> = {
   Code,
@@ -78,6 +81,11 @@ export function Sidebar({
                   <span className="flex items-center gap-2">
                     <Icon className="size-4 shrink-0" style={{ color: type.color }} />
                     <span>{type.name}</span>
+                    {proTypes.has(type.name) && (
+                      <Badge variant="secondary" className="h-4 px-1 text-[10px] font-semibold tracking-wide">
+                        PRO
+                      </Badge>
+                    )}
                   </span>
                   <span className="text-xs text-muted-foreground">{type.count}</span>
                 </Link>
@@ -221,6 +229,11 @@ export function SidebarContent({ data }: { data: SidebarData }) {
                 <span className="flex items-center gap-2">
                   <Icon className="size-4 shrink-0" style={{ color: type.color }} />
                   <span>{type.name}</span>
+                  {proTypes.has(type.name) && (
+                    <Badge variant="secondary" className="h-4 px-1 text-[10px] font-semibold tracking-wide">
+                      PRO
+                    </Badge>
+                  )}
                 </span>
                 <span className="text-xs text-muted-foreground">{type.count}</span>
               </Link>

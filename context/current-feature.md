@@ -1,7 +1,25 @@
-# Current Feature
+# Current Feature: Add Pro Badge to Sidebar
+
+## Status
+In Progress
+
+## Goals
+- Add a "PRO" badge to the Files type in the sidebar
+- Add a "PRO" badge to the Images type in the sidebar
+- Use the shadcn/ui Badge component
+- Badge should be clean and subtle, with "PRO" in uppercase
+
+## Notes
+- Uses shadcn/ui Badge component (already part of the tech stack)
+- Badge styling should be subtle — not visually dominant
+- Only applies to Files and Images sidebar items
+
+---
+
+## History
 
 ### Stats & Sidebar (Live Data)
-- **Status:** In Progress
+- **Status:** Completed
 
 #### Goals
 - Display stats from database data, keeping current design/layout
@@ -15,8 +33,6 @@
 - `src/lib/db/collections.ts`
 
 ---
-
-## History
 
 ### Dashboard Items (Live Data)
 - **Status:** Completed
