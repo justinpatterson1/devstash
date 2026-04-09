@@ -1,13 +1,22 @@
-# Current Feature
+# Current Feature: Auth Credentials - Email/Password Provider
 
 ## Status
-Not Started
+In Progress
 
 ## Goals
-<!-- Goals will be added when a feature is loaded -->
+- Add `password` field to User model via Prisma migration
+- Add Credentials provider placeholder in `auth.config.ts` (`authorize: () => null`)
+- Override Credentials provider in `auth.ts` with bcrypt validation logic
+- Create registration API route at `POST /api/auth/register`
+- Registration accepts name, email, password, confirmPassword
+- Validate passwords match, check for existing user, hash with bcryptjs
+- Ensure GitHub OAuth still works alongside credentials
 
 ## Notes
-<!-- Notes will be added when a feature is loaded -->
+- bcryptjs is already installed
+- Split config pattern: placeholder in auth.config.ts, real logic in auth.ts
+- Registration endpoint returns success/error JSON response
+- Test via curl and NextAuth's default sign-in page
 
 ---
 
