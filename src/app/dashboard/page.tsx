@@ -1,28 +1,26 @@
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
 import { StatsCards } from "@/components/dashboard/main/stats-cards";
 import { CollectionsSection } from "@/components/dashboard/main/collections-section";
 import { PinnedItems } from "@/components/dashboard/main/pinned-items";
 import { RecentItems } from "@/components/dashboard/main/recent-items";
 import { getRecentCollections } from "@/lib/db/collections";
 import { getPinnedItems, getRecentItems, getDashboardStats } from "@/lib/db/items";
-import { prisma } from "@/lib/prisma";
 
 export default async function DashboardPage() {
-  // Temporary: fetch first user until auth is implemented
-  const user = await prisma.user.findFirst();
+  const session = await auth();
 
-  if (!user) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <p className="text-muted-foreground">No user found. Run the seed script first.</p>
-      </div>
-    );
+  if (!session?.user?.id) {
+    redirect("/api/auth/signin");
   }
 
+  const userId = session.user.id;
+
   const [collections, pinnedItems, recentItems, stats] = await Promise.all([
-    getRecentCollections(user.id),
-    getPinnedItems(user.id),
-    getRecentItems(user.id, 10),
-    getDashboardStats(user.id),
+    getRecentCollections(userId),
+    getPinnedItems(userId),
+    getRecentItems(userId, 10),
+    getDashboardStats(userId),
   ]);
 
   return (

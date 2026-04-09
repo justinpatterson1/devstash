@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { getItemTypesWithCounts, getSidebarCollections } from "@/lib/db/items";
 import { prisma } from "@/lib/prisma";
@@ -7,10 +9,18 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await prisma.user.findFirst();
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/api/auth/signin");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+  });
 
   if (!user) {
-    return <div className="flex h-full items-center justify-center">{children}</div>;
+    redirect("/api/auth/signin");
   }
 
   const [itemTypes, { favorites, recents }] = await Promise.all([
