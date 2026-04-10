@@ -1,26 +1,34 @@
-# Current Feature: Forgot Password
+# Current Feature
 
 ## Status
-In Progress
+Not Started
 
 ## Goals
-- Add "Forgot password?" link on the sign-in page
-- Create `/forgot-password` page with email input
-- Create `POST /api/auth/forgot-password` route that generates a reset token and sends reset email via Resend
-- Create `/reset-password` page where user enters new password + confirm password
-- Create `POST /api/auth/reset-password` route that validates token, hashes new password, updates user
-- Reuse existing `VerificationToken` model for password reset tokens (with `identifier` prefix to distinguish from email verification)
-- Show success/error messaging throughout the flow
+<!-- Goals will be added when a feature is loaded -->
 
 ## Notes
-- Reuse `generateVerificationToken` / `validateVerificationToken` from `src/lib/verification-token.ts` with a prefixed identifier (e.g., `reset:email@example.com`) to distinguish from email verification tokens
-- Add `sendPasswordResetEmail` to `src/lib/email.ts`
-- Token expires in 1 hour (shorter than email verification's 24h)
-- Flow: sign-in -> forgot password -> enter email -> receive email -> click link -> enter new password -> redirect to sign-in with success message
+<!-- Notes will be added when a feature is loaded -->
 
 ---
 
 ## History
+
+### Forgot Password
+- **Status:** Completed
+
+#### Goals
+- Forgot password link on sign-in page
+- `/forgot-password` page + API route (generates reset token, sends email via Resend)
+- `/reset-password` page + API route (validates token, updates password)
+- Reuses VerificationToken model with `reset:` prefix, 1-hour expiry
+- Success/error messaging throughout flow, toast duration set to 5s
+
+#### References
+- `src/app/(auth)/forgot-password/page.tsx`, `src/app/(auth)/reset-password/page.tsx`
+- `src/app/api/auth/forgot-password/route.ts`, `src/app/api/auth/reset-password/route.ts`
+- `src/lib/verification-token.ts`, `src/lib/email.ts`
+
+---
 
 ### Email Verification Toggle
 - **Status:** Completed
