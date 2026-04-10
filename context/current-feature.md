@@ -1,26 +1,35 @@
-# Current Feature: Email Verification on Register
+# Current Feature
 
 ## Status
-In Progress
+Not Started
 
 ## Goals
-- Install Resend SDK and create email sending utility
-- Generate a verification token on registration and store it in the database
-- Send verification email with a unique link using Resend
-- Create verification endpoint that validates the token and sets `emailVerified` on the User
-- Block sign-in for unverified users (return error message)
-- Add a `VerificationToken` or reuse the existing NextAuth `VerificationToken` model
-- Show appropriate messaging on sign-in page when email is not yet verified
+<!-- Goals will be added when a feature is loaded -->
 
 ## Notes
-- Using Resend for email delivery (`RESEND_API_KEY` is in `.env`)
-- User clicks link in email to verify — link hits an API route or page that marks the user verified
-- Existing `User.emailVerified` field (DateTime?) is already in the schema — set it on verification
-- Existing `VerificationToken` model in schema can be reused for storing verification tokens
+<!-- Notes will be added when a feature is loaded -->
 
 ---
 
 ## History
+
+### Email Verification on Register
+- **Status:** Completed
+
+#### Goals
+- Resend SDK for email delivery
+- Verification token generation and storage (reuses NextAuth VerificationToken model)
+- Verification email with styled link, 24h expiry
+- Verify-email endpoint sets `emailVerified` on User
+- Blocked sign-in for unverified users with custom `EmailNotVerified` error
+- Messaging on sign-in page: verify prompt, success, invalid token, unverified
+
+#### References
+- `src/lib/email.ts`, `src/lib/verification-token.ts`
+- `src/app/api/auth/verify-email/route.ts`
+- `src/auth.ts`, `src/app/api/auth/register/route.ts`
+
+---
 
 ### Auth UI - Sign In, Register & Sign Out
 - **Status:** Completed
