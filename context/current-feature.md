@@ -1,13 +1,18 @@
-# Current Feature
+# Current Feature: Email Verification Toggle
 
 ## Status
-Not Started
+In Progress
 
 ## Goals
-<!-- Goals will be added when a feature is loaded -->
+- Add `ENABLE_EMAIL_VERIFICATION=true|false` env variable to control email verification
+- When disabled: skip sending verification email on register, auto-set `emailVerified`, allow sign-in without verification
+- When enabled: current behavior (send email, require verification before sign-in)
+- Default to `false` so dev works without a Resend domain
 
 ## Notes
-<!-- Notes will be added when a feature is loaded -->
+- Env variable is the simplest approach — no code deploy needed to toggle, just change the env and restart
+- Touch points: register route (skip email send, auto-verify), auth.ts authorize (skip emailVerified check)
+- Keep all verification code in place — just gate it behind the flag
 
 ---
 
