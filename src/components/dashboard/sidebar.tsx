@@ -16,10 +16,13 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
+  LogOut,
 } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { signOut } from "next-auth/react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { UserAvatar } from "@/components/user-avatar";
 import type { SidebarData } from "@/components/dashboard/dashboard-shell";
 
 const proTypes = new Set(["file", "image"]);
@@ -184,23 +187,34 @@ export function Sidebar({
 
       {/* User avatar area */}
       <div className="border-t border-border p-2">
-        <div className="flex items-center gap-2 rounded-md px-2 py-1.5">
-          <Avatar className="size-7">
-            <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-              {data.userName.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          {!collapsed && (
-            <div className="flex flex-1 flex-col overflow-hidden">
-              <span className="truncate text-sm font-medium text-sidebar-foreground">
-                {data.userName}
-              </span>
-              {!data.isPro && (
-                <span className="text-xs text-muted-foreground">Free Plan</span>
-              )}
-            </div>
-          )}
-        </div>
+        <Popover>
+          <PopoverTrigger
+            className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 hover:bg-sidebar-accent cursor-pointer"
+          >
+            <Link href="/profile" onClick={(e) => e.stopPropagation()}>
+              <UserAvatar name={data.userName} image={data.userImage} className="size-7" />
+            </Link>
+            {!collapsed && (
+              <div className="flex flex-1 flex-col overflow-hidden text-left">
+                <span className="truncate text-sm font-medium text-sidebar-foreground">
+                  {data.userName}
+                </span>
+                {!data.isPro && (
+                  <span className="text-xs text-muted-foreground">Free Plan</span>
+                )}
+              </div>
+            )}
+          </PopoverTrigger>
+          <PopoverContent side="top" align="start" sideOffset={8} className="w-48 p-1">
+            <button
+              onClick={() => signOut({ callbackUrl: "/sign-in" })}
+              className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-sidebar-foreground hover:bg-sidebar-accent cursor-pointer"
+            >
+              <LogOut className="size-4" />
+              Sign out
+            </button>
+          </PopoverContent>
+        </Popover>
       </div>
     </aside>
   );
@@ -313,21 +327,32 @@ export function SidebarContent({ data }: { data: SidebarData }) {
 
       {/* User avatar area */}
       <div className="border-t border-border p-2">
-        <div className="flex items-center gap-2 rounded-md px-2 py-1.5">
-          <Avatar className="size-7">
-            <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-              {data.userName.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex flex-1 flex-col overflow-hidden">
-            <span className="truncate text-sm font-medium text-sidebar-foreground">
-              {data.userName}
-            </span>
-            {!data.isPro && (
-              <span className="text-xs text-muted-foreground">Free Plan</span>
-            )}
-          </div>
-        </div>
+        <Popover>
+          <PopoverTrigger
+            className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 hover:bg-sidebar-accent cursor-pointer"
+          >
+            <Link href="/profile" onClick={(e) => e.stopPropagation()}>
+              <UserAvatar name={data.userName} image={data.userImage} className="size-7" />
+            </Link>
+            <div className="flex flex-1 flex-col overflow-hidden text-left">
+              <span className="truncate text-sm font-medium text-sidebar-foreground">
+                {data.userName}
+              </span>
+              {!data.isPro && (
+                <span className="text-xs text-muted-foreground">Free Plan</span>
+              )}
+            </div>
+          </PopoverTrigger>
+          <PopoverContent side="top" align="start" sideOffset={8} className="w-48 p-1">
+            <button
+              onClick={() => signOut({ callbackUrl: "/sign-in" })}
+              className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-sidebar-foreground hover:bg-sidebar-accent cursor-pointer"
+            >
+              <LogOut className="size-4" />
+              Sign out
+            </button>
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );

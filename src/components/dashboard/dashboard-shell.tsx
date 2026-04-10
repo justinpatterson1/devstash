@@ -11,6 +11,7 @@ export interface SidebarData {
   favoriteCollections: SidebarCollection[];
   recentCollections: SidebarCollection[];
   userName: string;
+  userImage?: string | null;
   isPro: boolean;
 }
 

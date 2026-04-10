@@ -12,7 +12,7 @@ export default async function DashboardLayout({
   const session = await auth();
 
   if (!session?.user?.id) {
-    redirect("/api/auth/signin");
+    redirect("/sign-in");
   }
 
   const user = await prisma.user.findUnique({
@@ -20,7 +20,7 @@ export default async function DashboardLayout({
   });
 
   if (!user) {
-    redirect("/api/auth/signin");
+    redirect("/sign-in");
   }
 
   const [itemTypes, { favorites, recents }] = await Promise.all([
@@ -35,6 +35,7 @@ export default async function DashboardLayout({
         favoriteCollections: favorites,
         recentCollections: recents,
         userName: user.name ?? "User",
+        userImage: user.image,
         isPro: user.isPro,
       }}
     >
