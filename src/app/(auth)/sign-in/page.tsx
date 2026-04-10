@@ -22,6 +22,8 @@ function SignInForm() {
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard"
   const error = searchParams.get("error")
+  const verified = searchParams.get("verified")
+  const message = searchParams.get("message")
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -41,7 +43,11 @@ function SignInForm() {
     })
 
     if (result?.error) {
-      setFormError("Invalid email or password")
+      if (result.code === "EmailNotVerified") {
+        setFormError("Please verify your email before signing in. Check your inbox.")
+      } else {
+        setFormError("Invalid email or password")
+      }
       setLoading(false)
     } else if (result?.url) {
       toast.success("Signed in successfully")
@@ -59,7 +65,25 @@ function SignInForm() {
           </p>
         </div>
 
-        {(error || formError) && (
+        {message === "verify" && (
+          <div className="rounded-md bg-blue-500/10 px-3 py-2 text-sm text-blue-400">
+            Check your email for a verification link before signing in.
+          </div>
+        )}
+
+        {verified && (
+          <div className="rounded-md bg-green-500/10 px-3 py-2 text-sm text-green-500">
+            Email verified successfully! You can now sign in.
+          </div>
+        )}
+
+        {error === "InvalidToken" && (
+          <div className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            Invalid or expired verification link. Please register again.
+          </div>
+        )}
+
+        {(formError || (error && error !== "InvalidToken")) && (
           <div className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
             {formError || "Something went wrong. Please try again."}
           </div>

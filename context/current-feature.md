@@ -1,13 +1,22 @@
-# Current Feature
+# Current Feature: Email Verification on Register
 
 ## Status
-Not Started
+In Progress
 
 ## Goals
-<!-- Goals will be added when a feature is loaded -->
+- Install Resend SDK and create email sending utility
+- Generate a verification token on registration and store it in the database
+- Send verification email with a unique link using Resend
+- Create verification endpoint that validates the token and sets `emailVerified` on the User
+- Block sign-in for unverified users (return error message)
+- Add a `VerificationToken` or reuse the existing NextAuth `VerificationToken` model
+- Show appropriate messaging on sign-in page when email is not yet verified
 
 ## Notes
-<!-- Notes will be added when a feature is loaded -->
+- Using Resend for email delivery (`RESEND_API_KEY` is in `.env`)
+- User clicks link in email to verify — link hits an API route or page that marks the user verified
+- Existing `User.emailVerified` field (DateTime?) is already in the schema — set it on verification
+- Existing `VerificationToken` model in schema can be reused for storing verification tokens
 
 ---
 
