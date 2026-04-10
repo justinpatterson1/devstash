@@ -17,6 +17,7 @@ import {
   ChevronLeft,
   ChevronRight,
   LogOut,
+  User,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { Badge } from "@/components/ui/badge";
@@ -191,9 +192,7 @@ export function Sidebar({
           <PopoverTrigger
             className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 hover:bg-sidebar-accent cursor-pointer"
           >
-            <Link href="/profile" onClick={(e) => e.stopPropagation()}>
-              <UserAvatar name={data.userName} image={data.userImage} className="size-7" />
-            </Link>
+            <UserAvatar name={data.userName} image={data.userImage} className="size-7" />
             {!collapsed && (
               <div className="flex flex-1 flex-col overflow-hidden text-left">
                 <span className="truncate text-sm font-medium text-sidebar-foreground">
@@ -206,6 +205,13 @@ export function Sidebar({
             )}
           </PopoverTrigger>
           <PopoverContent side="top" align="start" sideOffset={8} className="w-48 p-1">
+            <Link
+              href="/profile"
+              className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-sidebar-foreground hover:bg-sidebar-accent"
+            >
+              <User className="size-4" />
+              Profile
+            </Link>
             <button
               onClick={() => signOut({ callbackUrl: "/sign-in" })}
               className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-sidebar-foreground hover:bg-sidebar-accent cursor-pointer"
@@ -331,9 +337,7 @@ export function SidebarContent({ data }: { data: SidebarData }) {
           <PopoverTrigger
             className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 hover:bg-sidebar-accent cursor-pointer"
           >
-            <Link href="/profile" onClick={(e) => e.stopPropagation()}>
-              <UserAvatar name={data.userName} image={data.userImage} className="size-7" />
-            </Link>
+            <UserAvatar name={data.userName} image={data.userImage} className="size-7" />
             <div className="flex flex-1 flex-col overflow-hidden text-left">
               <span className="truncate text-sm font-medium text-sidebar-foreground">
                 {data.userName}
@@ -344,6 +348,13 @@ export function SidebarContent({ data }: { data: SidebarData }) {
             </div>
           </PopoverTrigger>
           <PopoverContent side="top" align="start" sideOffset={8} className="w-48 p-1">
+            <Link
+              href="/profile"
+              className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-sidebar-foreground hover:bg-sidebar-accent"
+            >
+              <User className="size-4" />
+              Profile
+            </Link>
             <button
               onClick={() => signOut({ callbackUrl: "/sign-in" })}
               className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-sidebar-foreground hover:bg-sidebar-accent cursor-pointer"

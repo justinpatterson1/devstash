@@ -1,13 +1,22 @@
-# Current Feature
+# Current Feature: Profile Page
 
 ## Status
-Not Started
+In Progress
 
 ## Goals
-<!-- Goals will be added when a feature is loaded -->
+- Create profile page at `/profile` (protected route)
+- Display user info: email, name, avatar (GitHub or initials), account creation date
+- Show usage stats: total items, total collections, breakdown by item type
+- Change password functionality (email/password users only, not GitHub OAuth)
+- Delete account with confirmation dialog
+- Follow existing codebase patterns for data fetching and components
 
 ## Notes
-<!-- Notes will be added when a feature is loaded -->
+- Use existing `UserAvatar` component for avatar display
+- Change password button only for users with a password (not GitHub-only)
+- Delete account needs confirmation dialog to prevent accidental deletion
+- Item type breakdown: counts for each type (snippets, prompts, notes, commands, links, files, images)
+- Route must be authenticated — redirect to `/sign-in` if not logged in
 
 ---
 
