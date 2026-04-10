@@ -36,3 +36,39 @@ export async function validateVerificationToken(token: string) {
 
   return verificationToken
 }
+
+export async function generatePasswordResetToken(email: string) {
+  const token = randomBytes(32).toString("hex")
+  const expires = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
+  const identifier = `reset:${email}`
+
+  await prisma.verificationToken.deleteMany({
+    where: { identifier },
+  })
+
+  const resetToken = await prisma.verificationToken.create({
+    data: {
+      identifier,
+      token,
+      expires,
+    },
+  })
+
+  return resetToken
+}
+
+export async function validatePasswordResetToken(token: string) {
+  const resetToken = await prisma.verificationToken.findUnique({
+    where: { token },
+  })
+
+  if (!resetToken) return null
+  if (!resetToken.identifier.startsWith("reset:")) return null
+  if (resetToken.expires < new Date()) return null
+
+  await prisma.verificationToken.delete({
+    where: { token },
+  })
+
+  return { email: resetToken.identifier.replace("reset:", "") }
+}

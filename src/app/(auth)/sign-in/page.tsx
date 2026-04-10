@@ -71,6 +71,12 @@ function SignInForm() {
           </div>
         )}
 
+        {message === "password-reset" && (
+          <div className="rounded-md bg-green-500/10 px-3 py-2 text-sm text-green-500">
+            Password reset successfully! You can now sign in.
+          </div>
+        )}
+
         {verified && (
           <div className="rounded-md bg-green-500/10 px-3 py-2 text-sm text-green-500">
             Email verified successfully! You can now sign in.
@@ -111,6 +117,11 @@ function SignInForm() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+          </div>
+          <div className="flex justify-end">
+            <Link href="/forgot-password" className="text-xs text-muted-foreground hover:text-primary">
+              Forgot password?
+            </Link>
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Signing in..." : "Sign in"}
