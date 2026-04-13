@@ -45,6 +45,8 @@ function SignInForm() {
     if (result?.error) {
       if (result.code === "EmailNotVerified") {
         setFormError("Please verify your email before signing in. Check your inbox.")
+      } else if (result.code === "TooManyAttempts") {
+        setFormError("Too many sign-in attempts. Please try again in a few minutes.")
       } else {
         setFormError("Invalid email or password")
       }

@@ -3,10 +3,15 @@ import Credentials from "next-auth/providers/credentials"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
+import { signInLimiter, getIP } from "@/lib/rate-limit"
 import authConfig from "./auth.config"
 
 class EmailNotVerified extends CredentialsSignin {
   code = "EmailNotVerified"
+}
+
+class TooManyAttempts extends CredentialsSignin {
+  code = "TooManyAttempts"
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -30,11 +35,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, request) {
         const email = credentials?.email as string | undefined
         const password = credentials?.password as string | undefined
 
         if (!email || !password) return null
+
+        try {
+          const ip = getIP(request)
+          const { success } = await signInLimiter.limit(ip)
+          if (!success) throw new TooManyAttempts()
+        } catch (e) {
+          if (e instanceof TooManyAttempts) throw e
+          // Fail open if Redis is unavailable
+        }
 
         const user = await prisma.user.findUnique({ where: { email } })
         if (!user?.password) return null

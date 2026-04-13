@@ -3,8 +3,12 @@ import bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
 import { generateVerificationToken } from "@/lib/verification-token"
 import { sendVerificationEmail } from "@/lib/email"
+import { registerLimiter, getIP, checkRateLimit } from "@/lib/rate-limit"
 
 export async function POST(request: Request) {
+  const rateLimited = await checkRateLimit(registerLimiter, getIP(request))
+  if (rateLimited) return rateLimited
+
   const body = await request.json()
   const { name, email, password, confirmPassword } = body
 
