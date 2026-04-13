@@ -1,29 +1,31 @@
-# Current Feature: Rate Limiting for Auth
+# Current Feature
 
 ## Status
-In Progress
+Not Started
 
 ## Goals
-- Install `@upstash/ratelimit` and `@upstash/redis`
-- Create reusable rate limiting utility at `src/lib/rate-limit.ts` using sliding window algorithm
-- Rate limit `/api/auth/register` — 3 attempts / 1 hour / by IP
-- Rate limit `/api/auth/forgot-password` — 3 attempts / 1 hour / by IP
-- Rate limit `/api/auth/reset-password` — 5 attempts / 15 min / by IP
-- Rate limit `/api/profile/change-password` — 5 attempts / 15 min / by IP
-- Return 429 with `Retry-After` header and user-friendly error message
-- Fail open if Upstash is unavailable
-- Display rate limit errors via toast on frontend
+<!-- Goals will be added when a feature is loaded -->
 
 ## Notes
-- Env vars `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` already in `.env` and `.env.production`
-- Extract IP from `x-forwarded-for` header (Vercel) or fallback
-- Upstash free tier: 10k requests/day (sufficient for auth limiting)
-- Login (credentials callback) is handled internally by NextAuth — rate limiting there requires a custom approach, skip for now
-- Rate limiting should fail open (allow request) if Redis is unavailable
+<!-- Notes will be added when a feature is loaded -->
 
 ---
 
 ## History
+
+### Rate Limiting for Auth
+- **Status:** Completed
+
+#### Goals
+- Upstash sliding window rate limiting on register (3/hr), forgot-password (3/hr), reset-password (5/15min), change-password (5/15min), sign-in (5/15min)
+- 429 responses with Retry-After header, fail-open if Redis unavailable
+- Sign-in uses custom CredentialsSignin subclass (authorize can only throw)
+
+#### References
+- `context/features/rate-limiting-spec.md`
+- `src/lib/rate-limit.ts`, `src/auth.ts`
+
+---
 
 ### Profile Page
 - **Status:** Completed
