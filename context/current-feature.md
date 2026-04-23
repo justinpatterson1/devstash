@@ -1,13 +1,24 @@
-# Current Feature
+# Current Feature: Items List View
 
 ## Status
-Not Started
+In Progress
 
 ## Goals
-<!-- Goals will be added when a feature is loaded -->
+- Create dynamic route `/items/[type]` (e.g., /items/snippets, /items/notes)
+- Fetch and display items filtered by type
+- Responsive grid of ItemCard components
+- Two columns on medium and up
+- Each card has left border colored by item type
+- Follow existing codebase patterns
 
 ## Notes
-<!-- Notes will be added when a feature is loaded -->
+- Spec: `context/features/item-list-view-spec.md`
+- Architecture reference: `docs/item-crud-architecture.md`
+- Sidebar already links to `/items/{typeName}` via `getTypeSlug()` in `src/components/dashboard/sidebar.tsx`
+- Existing query patterns in `src/lib/db/items.ts` (mapItem, itemInclude)
+- Need new `getItemsByType(userId, typeName)` query
+- Route needs to be under dashboard layout for sidebar access
+- Valid type slugs: snippet, prompt, command, note, file, image, link
 
 ---
 

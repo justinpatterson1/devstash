@@ -18,8 +18,16 @@
 
 - Read files before editing them.
 - Prefer editing existing files over creating new ones.
-- Test that changes don't break the build (`npm run build`, `npm run lint`).
+- Test that changes don't break the build (`npm run build`, `npm run lint`, `npm test`).
 - Follow the conventions in `context/coding-standards.md`.
+
+## Testing
+
+- Unit tests run via Vitest: `npm test` (single run) or `npm run test:watch`.
+- **Only test server actions and utilities** — files in `src/actions/**` and `src/lib/**`.
+- Do not write tests for React components.
+- Co-locate tests next to the source file: `foo.ts` → `foo.test.ts`.
+- Tests run in a Node environment (no jsdom).
 
 ## What to Avoid
 

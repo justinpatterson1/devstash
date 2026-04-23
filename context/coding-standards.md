@@ -25,6 +25,14 @@
 - Always use migrations (`npx prisma migrate dev`) — never `db push` in production.
 - Keep the schema versioned and controlled.
 
+## Testing
+
+- Vitest is the test runner. Run with `npm test` or `npm run test:watch`.
+- Test scope is limited to **server actions** (`src/actions/**`) and **utilities** (`src/lib/**`). Components are not unit tested.
+- Tests are co-located: `foo.ts` → `foo.test.ts`.
+- Tests run in a Node environment.
+- Use explicit imports from `vitest` (`describe`, `it`, `expect`) — globals are disabled.
+
 ## Naming Conventions
 
 - **Files:** kebab-case for files (`item-card.tsx`), PascalCase for component exports (`ItemCard`).
