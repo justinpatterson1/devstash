@@ -159,6 +159,30 @@ export async function getSidebarCollections(
   };
 }
 
+export async function getItemsByType(
+  userId: string,
+  typeName: string
+): Promise<ItemWithDetails[]> {
+  const items = await prisma.item.findMany({
+    where: {
+      userId,
+      itemType: { name: typeName },
+    },
+    include: itemInclude,
+    orderBy: { updatedAt: "desc" },
+  });
+  return items.map(mapItem);
+}
+
+export async function getItemTypeByName(
+  name: string
+): Promise<{ id: string; name: string; icon: string; color: string } | null> {
+  return prisma.itemType.findUnique({
+    where: { name },
+    select: { id: true, name: true, icon: true, color: true },
+  });
+}
+
 export async function getDashboardStats(userId: string): Promise<DashboardStats> {
   const [totalItems, totalCollections, favoriteItems, favoriteCollections] =
     await Promise.all([
