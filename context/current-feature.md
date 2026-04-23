@@ -1,24 +1,13 @@
-# Current Feature: Items List View
+# Current Feature
 
 ## Status
-In Progress
+Not Started
 
 ## Goals
-- Create dynamic route `/items/[type]` (e.g., /items/snippets, /items/notes)
-- Fetch and display items filtered by type
-- Responsive grid of ItemCard components
-- Two columns on medium and up
-- Each card has left border colored by item type
-- Follow existing codebase patterns
+<!-- Goals will be added when a feature is loaded -->
 
 ## Notes
-- Spec: `context/features/item-list-view-spec.md`
-- Architecture reference: `docs/item-crud-architecture.md`
-- Sidebar already links to `/items/{typeName}` via `getTypeSlug()` in `src/components/dashboard/sidebar.tsx`
-- Existing query patterns in `src/lib/db/items.ts` (mapItem, itemInclude)
-- Need new `getItemsByType(userId, typeName)` query
-- Route needs to be under dashboard layout for sidebar access
-- Valid type slugs: snippet, prompt, command, note, file, image, link
+<!-- Notes will be added when a feature is loaded -->
 
 ---
 
@@ -316,3 +305,24 @@ In Progress
 - `context/screenshots/DashboardUI_1.png`
 - `context/project_overview.md`
 - `src/lib/mock-data.ts`
+
+---
+
+### Items List View
+- **Status:** Completed
+
+#### Goals
+- Dynamic route `/items/[type]` filtered by item type
+- Responsive 2-column grid of ItemCard components (md and up)
+- Type-colored left border on each card
+- Sidebar available via shared items layout (mirrors dashboard shell)
+- Added `getItemsByType` and `getItemTypeByName` queries
+- Vitest set up for server actions + utilities (scope excludes components)
+
+#### References
+- `context/features/item-list-view-spec.md`
+- `docs/item-crud-architecture.md`
+- `src/app/items/[type]/page.tsx`, `src/app/items/layout.tsx`
+- `src/components/items/item-card.tsx`
+- `src/lib/db/items.ts`
+- `vitest.config.ts`, `src/lib/utils.test.ts`
