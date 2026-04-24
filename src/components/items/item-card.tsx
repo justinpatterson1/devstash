@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Code,
   Sparkles,
@@ -12,6 +14,7 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useItemDrawer } from "@/components/items/item-drawer-provider";
 import type { ItemWithDetails } from "@/lib/db/items";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -24,11 +27,21 @@ const iconMap: Record<string, React.ElementType> = {
   Image,
 };
 
-export function ItemCard({ item }: { item: ItemWithDetails }) {
+export function ItemCard({
+  item,
+  showPin = true,
+  showFavorite = true,
+}: {
+  item: ItemWithDetails;
+  showPin?: boolean;
+  showFavorite?: boolean;
+}) {
+  const { openItem } = useItemDrawer();
   const Icon = iconMap[item.typeIcon] ?? Layers;
 
   return (
     <Card
+      onClick={() => openItem(item.id)}
       className="cursor-pointer transition-colors hover:bg-muted/50"
       style={{ borderLeftWidth: "3px", borderLeftColor: item.typeColor }}
     >
@@ -42,10 +55,10 @@ export function ItemCard({ item }: { item: ItemWithDetails }) {
             <span className="text-sm font-medium">{item.title}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            {item.isPinned && (
+            {showPin && item.isPinned && (
               <Pin className="size-3.5 shrink-0 rotate-45 text-muted-foreground" />
             )}
-            {item.isFavorite && (
+            {showFavorite && item.isFavorite && (
               <Star className="size-3.5 shrink-0 fill-yellow-500 text-yellow-500" />
             )}
           </div>

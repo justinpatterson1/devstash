@@ -31,6 +31,7 @@ async function main() {
     data: {
       email: "demo@devstash.io",
       name: "Demo User",
+      password: hashedPassword,
       isPro: false,
       emailVerified: new Date(),
       image: null,
