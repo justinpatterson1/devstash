@@ -1,13 +1,13 @@
 # Current Feature
 
 ## Status
-Not Started
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
-<!-- Goals will be added when a feature is loaded -->
+<!-- Bullet points of what success looks like -->
 
 ## Notes
-<!-- Notes will be added when a feature is loaded -->
+<!-- Additional context, constraints, or details from spec -->
 
 ---
 
@@ -326,3 +326,22 @@ Not Started
 - `src/components/items/item-card.tsx`
 - `src/lib/db/items.ts`
 - `vitest.config.ts`, `src/lib/utils.test.ts`
+
+---
+
+### Item Drawer
+- **Status:** Completed
+
+#### Goals
+- Right-side slide-in drawer using shadcn Sheet component
+- Clicking an ItemCard opens the drawer with that item's full data (dashboard + items list pages)
+- Action bar: Favorite, Pin, Copy, Edit, Delete (display only)
+- Client-side ItemDrawerProvider manages drawer state so pages remain server components
+- Full item detail fetched via `/api/items/[id]` with auth check
+- Skeleton loading state while fetching
+
+#### References
+- `context/features/item-drawer-spec.md`
+- `src/components/items/item-drawer.tsx`, `src/components/items/item-drawer-provider.tsx`
+- `src/app/api/items/[id]/route.ts`
+- `src/lib/db/items.ts` (added `getItemById` + `ItemFull` type)
