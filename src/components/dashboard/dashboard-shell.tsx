@@ -4,6 +4,7 @@ import { useState } from "react";
 import { TopBar } from "@/components/dashboard/top-bar";
 import { Sidebar, SidebarContent } from "@/components/dashboard/sidebar";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
+import { ItemDrawerProvider } from "@/components/items/item-drawer-provider";
 import type { SidebarItemType, SidebarCollection } from "@/lib/db/items";
 
 export interface SidebarData {
@@ -46,7 +47,9 @@ export function DashboardShell({
           </SheetContent>
         </Sheet>
 
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-6">
+          <ItemDrawerProvider>{children}</ItemDrawerProvider>
+        </main>
       </div>
     </div>
   );
