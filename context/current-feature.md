@@ -1,13 +1,23 @@
-# Current Feature
+# Current Feature: Item Delete
 
 ## Status
-Not Started
+In Progress
 
 ## Goals
-<!-- Bullet points of what success looks like -->
+- Delete button in the drawer's action bar opens a shadcn `AlertDialog` confirmation
+- Confirm triggers the server action; Cancel closes the dialog with no change
+- On success: close the drawer, show success toast, refresh card lists
+- On error: show error toast, leave the drawer open
+- New `deleteItem(itemId)` server action in `src/actions/items.ts` with `{ success, error }` return
+- New `deleteItem(userId, itemId)` query function in `src/lib/db/items.ts` with ownership check
+- `router.refresh()` after delete so dashboard and items list pages reflect the removal
+- Vitest coverage for the server action (auth, ownership miss, success)
 
 ## Notes
-<!-- Additional context, constraints, or details from spec -->
+- Drawer Delete button is currently display-only — wire it up to open the dialog
+- Use shadcn `AlertDialog` for confirmation (install via `npx shadcn@latest add alert-dialog` if missing)
+- Tag join rows and collection memberships are removed via Prisma schema cascade — no extra cleanup needed in the query
+- Auth via `auth()` in the server action; ownership enforced in the query (return `false` if no row matched)
 
 ---
 
