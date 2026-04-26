@@ -22,12 +22,14 @@ export function ItemDrawerProvider({ children }: { children: React.ReactNode }) 
   const [open, setOpen] = useState(false);
   const [item, setItem] = useState<ItemFull | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const latestIdRef = useRef<string | null>(null);
 
   const openItem = useCallback(async (id: string) => {
     latestIdRef.current = id;
     setItem(null);
     setLoading(true);
+    setIsEditing(false);
     setOpen(true);
 
     try {
@@ -44,10 +46,31 @@ export function ItemDrawerProvider({ children }: { children: React.ReactNode }) 
     }
   }, []);
 
+  const handleOpenChange = useCallback((next: boolean) => {
+    setOpen(next);
+    if (!next) setIsEditing(false);
+  }, []);
+
+  const startEdit = useCallback(() => setIsEditing(true), []);
+  const cancelEdit = useCallback(() => setIsEditing(false), []);
+  const applyUpdate = useCallback((updated: ItemFull) => {
+    setItem(updated);
+    setIsEditing(false);
+  }, []);
+
   return (
     <ItemDrawerContext.Provider value={{ openItem }}>
       {children}
-      <ItemDrawer open={open} onOpenChange={setOpen} item={item} loading={loading} />
+      <ItemDrawer
+        open={open}
+        onOpenChange={handleOpenChange}
+        item={item}
+        loading={loading}
+        isEditing={isEditing}
+        onStartEdit={startEdit}
+        onCancelEdit={cancelEdit}
+        onSaved={applyUpdate}
+      />
     </ItemDrawerContext.Provider>
   );
 }
