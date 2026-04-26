@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ItemDrawerEdit } from "@/components/items/item-drawer-edit";
 import type { ItemFull } from "@/lib/db/items";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -62,11 +63,19 @@ export function ItemDrawer({
   onOpenChange,
   item,
   loading,
+  isEditing,
+  onStartEdit,
+  onCancelEdit,
+  onSaved,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   item: ItemFull | null;
   loading: boolean;
+  isEditing: boolean;
+  onStartEdit: () => void;
+  onCancelEdit: () => void;
+  onSaved: (updated: ItemFull) => void;
 }) {
   async function handleCopy() {
     if (!item) return;
@@ -85,6 +94,17 @@ export function ItemDrawer({
       <SheetContent side="right" className="w-full sm:max-w-md flex flex-col gap-0 p-0">
         {loading || !item ? (
           <DrawerSkeleton />
+        ) : isEditing ? (
+          <>
+            <SheetHeader className="sr-only">
+              <SheetTitle>Edit {item.title}</SheetTitle>
+            </SheetHeader>
+            <ItemDrawerEdit
+              item={item}
+              onCancel={onCancelEdit}
+              onSaved={onSaved}
+            />
+          </>
         ) : (
           <>
             <div className="flex items-center gap-1 border-b border-border px-3 py-2">
@@ -123,7 +143,12 @@ export function ItemDrawer({
               >
                 <Copy />
               </Button>
-              <Button variant="ghost" size="icon-sm" aria-label="Edit">
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={onStartEdit}
+                aria-label="Edit"
+              >
                 <Pencil />
               </Button>
               <div className="flex-1" />

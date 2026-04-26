@@ -1,13 +1,28 @@
-# Current Feature
+# Current Feature: Item Drawer — Edit Mode
 
 ## Status
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
-<!-- Bullet points of what success looks like -->
+- Edit button in the drawer's action bar toggles the drawer into edit mode inline (same drawer stays open)
+- In edit mode, action bar is replaced with Save and Cancel buttons
+- Cancel discards changes and returns to view mode; Save persists changes, refreshes drawer data, returns to view mode
+- Toast notification on save success or error
+- Editable fields for all types: Title (required), Description (textarea), Tags (comma-separated → array)
+- Type-specific fields: Content (snippet/prompt/command/note), Language (snippet/command), URL (link)
+- Non-editable in edit mode: item type, collections, created/updated dates
+- Zod validation of the update payload in the server action (source of truth)
+- New `updateItem(itemId, data)` server action in `src/actions/items.ts` with `{ success, data, error }` return
+- New `updateItem` query function in `src/lib/db/items.ts` (disconnect all tags, connect-or-create new)
+- Returns updated `ItemDetail` so drawer refreshes without a second fetch
+- `router.refresh()` after save so card list reflects changes
 
 ## Notes
-<!-- Additional context, constraints, or details from spec -->
+- Spec: `context/features/item-drawer-edit-spec.md`
+- No form library — controlled inputs with local state
+- Client-side guard: disable Save when title is empty
+- Content textarea is plain textarea for now; code editor comes later
+- Server action pattern follows `src/actions/` convention (directory doesn't exist yet — first server action in the codebase)
 
 ---
 

@@ -203,6 +203,87 @@ export async function getItemById(
   };
 }
 
+export type UpdateItemData = {
+  title: string;
+  description: string | null;
+  content: string | null;
+  url: string | null;
+  language: string | null;
+  tags: string[];
+};
+
+export async function updateItem(
+  userId: string,
+  itemId: string,
+  data: UpdateItemData
+): Promise<ItemFull | null> {
+  return prisma.$transaction(async (tx) => {
+    const existing = await tx.item.findFirst({
+      where: { id: itemId, userId },
+      select: { id: true },
+    });
+    if (!existing) return null;
+
+    await tx.item.update({
+      where: { id: itemId },
+      data: {
+        title: data.title,
+        description: data.description,
+        content: data.content,
+        url: data.url,
+        language: data.language,
+      },
+    });
+
+    await tx.itemTag.deleteMany({ where: { itemId } });
+
+    if (data.tags.length > 0) {
+      await tx.item.update({
+        where: { id: itemId },
+        data: {
+          tags: {
+            create: data.tags.map((name) => ({
+              tag: {
+                connectOrCreate: {
+                  where: { name },
+                  create: { name },
+                },
+              },
+            })),
+          },
+        },
+      });
+    }
+
+    const updated = await tx.item.findUnique({
+      where: { id: itemId },
+      include: {
+        itemType: { select: { name: true, icon: true, color: true } },
+        tags: { include: { tag: { select: { name: true } } } },
+        collections: {
+          include: { collection: { select: { id: true, name: true } } },
+        },
+      },
+    });
+    if (!updated) return null;
+
+    return {
+      ...mapItem(updated),
+      content: updated.content,
+      url: updated.url,
+      fileUrl: updated.fileUrl,
+      fileName: updated.fileName,
+      fileSize: updated.fileSize,
+      language: updated.language,
+      createdAt: updated.createdAt,
+      collections: updated.collections.map((ic) => ({
+        id: ic.collection.id,
+        name: ic.collection.name,
+      })),
+    };
+  });
+}
+
 export async function getItemsByType(
   userId: string,
   typeName: string
