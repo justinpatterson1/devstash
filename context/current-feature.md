@@ -1,21 +1,13 @@
-# Current Feature: Code Editor
+# Current Feature
 
 ## Status
-In Progress
+Not Started
 
 ## Goals
-- Create a `CodeEditor` component using Monaco Editor with a dark theme
-- Replace `Textarea` with `CodeEditor` for snippets and commands only (keep `Textarea` for notes, prompts, and other non-code types)
-- Add macOS-style window dots (red/yellow/green) at the top of the editor
-- Add a quick copy button in the editor header
-- Display the language in the editor header next to the copy button
-- Support both display (readonly) and edit modes
-- Fluid height with a 400px max, plus a themed custom scrollbar
+<!-- Bullet points of what success looks like -->
 
 ## Notes
-- Spec: `context/features/code-editor-spec.md`
-- Scope is limited to snippet and command item types — do not touch the textareas used for notes, prompts, or other types
-- Editor must work in both view (drawer detail) and edit (drawer edit + create dialog) contexts
+<!-- Additional context, constraints, or details from spec -->
 
 ---
 
@@ -423,3 +415,24 @@ In Progress
 - `src/components/dashboard/top-bar.tsx`
 - `src/components/ui/select.tsx`
 - `src/lib/db/items.ts` (added `createItem`)
+
+---
+
+### Code Editor
+- **Status:** Completed
+
+#### Goals
+- New `CodeEditor` component (Monaco Editor, dynamic-imported with `ssr: false`)
+- Custom `devstash-dark` theme (extends `vs-dark`) with themed 8px scrollbar
+- macOS-style window dots, language label, and copy button (with copied state) in the header
+- Read-only and edit modes via a `readOnly` prop and optional `onChange`
+- Fluid height clamped between 80–400px, driven by `editor.onDidContentSizeChange`
+- Replaces `Textarea` for snippets and commands only — view (drawer), edit (drawer edit), and create dialog
+- Notes, prompts, and other non-code types continue to use `Textarea`
+
+#### References
+- `context/features/code-editor-spec.md`
+- `src/components/code-editor.tsx`
+- `src/components/items/item-drawer.tsx`
+- `src/components/items/item-drawer-edit.tsx`
+- `src/components/items/item-create-dialog.tsx`
