@@ -1,13 +1,30 @@
-# Current Feature
+# Current Feature: Item Create
 
 ## Status
-Not Started
+In Progress
 
 ## Goals
-<!-- Bullet points of what success looks like -->
+- shadcn `Dialog` modal opens from the top bar's "New Item" button
+- Type selector for: snippet, prompt, command, note, link
+- Conditional fields shown by selected type:
+  - All types: Title (required), Description, Tags (comma-separated → array)
+  - snippet, command: Content, Language
+  - prompt, note: Content
+  - link: URL (required)
+- New `createItem(input)` server action in `src/actions/items.ts` with Zod validation and `{ success, data, error }` return
+- New `createItem(userId, data)` query function in `src/lib/db/items.ts` (creates the row + tags via connect-or-create)
+- On success: close modal, success toast, `router.refresh()` so dashboards/items lists pick up the new row
+- On error: error toast (or per-field errors), modal stays open
+- Vitest coverage for the action (auth, type-specific validation, success)
 
 ## Notes
-<!-- Additional context, constraints, or details from spec -->
+- Spec: `context/features/item-create-spec.md`
+- Mirror the `updateItem` pattern: controlled inputs, no form library, Zod as source of truth in the server action
+- Type selector limited to the five system types listed (file/image/custom not in scope)
+- URL field is required only for `link`; title required for all — model with a Zod discriminated union or per-type refinement
+- Top bar's "New Item" button is currently display-only — wire it up to open the dialog
+- Install `Dialog` via `npx shadcn@latest add dialog` if missing
+- Tag rows use connect-or-create (same pattern as `updateItem`)
 
 ---
 

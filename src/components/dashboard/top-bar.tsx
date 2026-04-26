@@ -1,6 +1,7 @@
-import { Search, Plus, Menu, FolderPlus } from "lucide-react";
+import { Search, Menu, FolderPlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { ItemCreateDialog } from "@/components/items/item-create-dialog";
 
 export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
   return (
@@ -34,10 +35,7 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
           <FolderPlus className="size-4" />
           <span className="hidden sm:inline">New Collection</span>
         </Button>
-        <Button size="sm">
-          <Plus className="size-4" />
-          <span className="hidden sm:inline">New Item</span>
-        </Button>
+        <ItemCreateDialog />
       </div>
     </header>
   );
