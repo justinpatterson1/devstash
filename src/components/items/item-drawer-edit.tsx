@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { CodeEditor } from "@/components/code-editor";
 import { updateItem } from "@/actions/items";
 import type { ItemFull } from "@/lib/db/items";
 
@@ -123,12 +124,20 @@ export function ItemDrawerEdit({
 
         {showContent && (
           <FieldRow label="Content" error={fieldErrors?.content?.[0]}>
-            <Textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              rows={8}
-              className="font-mono text-xs"
-            />
+            {showLanguage ? (
+              <CodeEditor
+                value={content}
+                onChange={setContent}
+                language={language}
+              />
+            ) : (
+              <Textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                rows={8}
+                className="font-mono text-xs"
+              />
+            )}
           </FieldRow>
         )}
 
