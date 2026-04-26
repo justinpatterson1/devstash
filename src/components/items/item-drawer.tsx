@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CodeEditor } from "@/components/code-editor";
 import { ItemDrawerEdit } from "@/components/items/item-drawer-edit";
 import { ItemDrawerDeleteDialog } from "@/components/items/item-drawer-delete-dialog";
 import type { ItemFull } from "@/lib/db/items";
@@ -307,11 +308,21 @@ function ContentBlock({ item }: { item: ItemFull }) {
   }
 
   if (item.content) {
+    const typeName = item.typeName.toLowerCase();
+    const isCode = typeName === "snippet" || typeName === "command";
     return (
       <Section label="Content">
-        <pre className="whitespace-pre-wrap rounded-md bg-muted p-3 text-xs font-mono">
-          {item.content}
-        </pre>
+        {isCode ? (
+          <CodeEditor
+            value={item.content}
+            language={item.language ?? undefined}
+            readOnly
+          />
+        ) : (
+          <pre className="whitespace-pre-wrap rounded-md bg-muted p-3 text-xs font-mono">
+            {item.content}
+          </pre>
+        )}
       </Section>
     );
   }

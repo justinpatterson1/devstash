@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { CodeEditor } from "@/components/code-editor";
 import { createItem, type CreateItemInput } from "@/actions/items";
 
 type ItemType = "snippet" | "prompt" | "command" | "note" | "link";
@@ -199,12 +200,20 @@ export function ItemCreateDialog() {
 
           {showContent && (
             <FieldRow label="Content" error={fieldErrors?.content?.[0]}>
-              <Textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                rows={6}
-                className="max-h-64 overflow-y-auto font-mono text-xs"
-              />
+              {showLanguage ? (
+                <CodeEditor
+                  value={content}
+                  onChange={setContent}
+                  language={language}
+                />
+              ) : (
+                <Textarea
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  rows={6}
+                  className="max-h-64 overflow-y-auto font-mono text-xs"
+                />
+              )}
             </FieldRow>
           )}
 
