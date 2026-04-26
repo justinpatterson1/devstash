@@ -284,6 +284,16 @@ export async function updateItem(
   });
 }
 
+export async function deleteItem(
+  userId: string,
+  itemId: string
+): Promise<boolean> {
+  const result = await prisma.item.deleteMany({
+    where: { id: itemId, userId },
+  });
+  return result.count > 0;
+}
+
 export async function getItemsByType(
   userId: string,
   typeName: string

@@ -5,7 +5,6 @@ import {
   Pin,
   Copy,
   Pencil,
-  Trash2,
   Code,
   Sparkles,
   StickyNote,
@@ -25,6 +24,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ItemDrawerEdit } from "@/components/items/item-drawer-edit";
+import { ItemDrawerDeleteDialog } from "@/components/items/item-drawer-delete-dialog";
 import type { ItemFull } from "@/lib/db/items";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -67,6 +67,7 @@ export function ItemDrawer({
   onStartEdit,
   onCancelEdit,
   onSaved,
+  onDeleted,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -76,6 +77,7 @@ export function ItemDrawer({
   onStartEdit: () => void;
   onCancelEdit: () => void;
   onSaved: (updated: ItemFull) => void;
+  onDeleted: () => void;
 }) {
   async function handleCopy() {
     if (!item) return;
@@ -107,7 +109,7 @@ export function ItemDrawer({
           </>
         ) : (
           <>
-            <div className="flex items-center gap-1 border-b border-border px-3 py-2">
+            <div className="flex items-center gap-1 border-b border-border py-2 pl-3 pr-12">
               <Button
                 variant="ghost"
                 size="icon-sm"
@@ -152,9 +154,11 @@ export function ItemDrawer({
                 <Pencil />
               </Button>
               <div className="flex-1" />
-              <Button variant="ghost" size="icon-sm" aria-label="Delete">
-                <Trash2 className="text-destructive" />
-              </Button>
+              <ItemDrawerDeleteDialog
+                itemId={item.id}
+                itemTitle={item.title}
+                onDeleted={onDeleted}
+              />
             </div>
 
             <div className="overflow-y-auto">

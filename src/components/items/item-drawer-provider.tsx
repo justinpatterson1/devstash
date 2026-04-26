@@ -57,6 +57,12 @@ export function ItemDrawerProvider({ children }: { children: React.ReactNode }) 
     setItem(updated);
     setIsEditing(false);
   }, []);
+  const handleDeleted = useCallback(() => {
+    latestIdRef.current = null;
+    setOpen(false);
+    setItem(null);
+    setIsEditing(false);
+  }, []);
 
   return (
     <ItemDrawerContext.Provider value={{ openItem }}>
@@ -70,6 +76,7 @@ export function ItemDrawerProvider({ children }: { children: React.ReactNode }) 
         onStartEdit={startEdit}
         onCancelEdit={cancelEdit}
         onSaved={applyUpdate}
+        onDeleted={handleDeleted}
       />
     </ItemDrawerContext.Provider>
   );
