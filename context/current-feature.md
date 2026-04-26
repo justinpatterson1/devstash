@@ -1,30 +1,13 @@
-# Current Feature: Item Create
+# Current Feature
 
 ## Status
-In Progress
+Not Started
 
 ## Goals
-- shadcn `Dialog` modal opens from the top bar's "New Item" button
-- Type selector for: snippet, prompt, command, note, link
-- Conditional fields shown by selected type:
-  - All types: Title (required), Description, Tags (comma-separated → array)
-  - snippet, command: Content, Language
-  - prompt, note: Content
-  - link: URL (required)
-- New `createItem(input)` server action in `src/actions/items.ts` with Zod validation and `{ success, data, error }` return
-- New `createItem(userId, data)` query function in `src/lib/db/items.ts` (creates the row + tags via connect-or-create)
-- On success: close modal, success toast, `router.refresh()` so dashboards/items lists pick up the new row
-- On error: error toast (or per-field errors), modal stays open
-- Vitest coverage for the action (auth, type-specific validation, success)
+<!-- Bullet points of what success looks like -->
 
 ## Notes
-- Spec: `context/features/item-create-spec.md`
-- Mirror the `updateItem` pattern: controlled inputs, no form library, Zod as source of truth in the server action
-- Type selector limited to the five system types listed (file/image/custom not in scope)
-- URL field is required only for `link`; title required for all — model with a Zod discriminated union or per-type refinement
-- Top bar's "New Item" button is currently display-only — wire it up to open the dialog
-- Install `Dialog` via `npx shadcn@latest add dialog` if missing
-- Tag rows use connect-or-create (same pattern as `updateItem`)
+<!-- Additional context, constraints, or details from spec -->
 
 ---
 
@@ -408,3 +391,27 @@ In Progress
 - `src/components/items/item-drawer.tsx`, `src/components/items/item-drawer-provider.tsx`
 - `src/components/ui/alert-dialog.tsx`
 - `src/lib/db/items.ts` (added `deleteItem`)
+
+---
+
+### Item Create
+- **Status:** Completed
+
+#### Goals
+- shadcn `Dialog` opens from the top bar's "New Item" button
+- Type selector for snippet, prompt, command, note, link
+- Conditional fields by type: Content (snippet/prompt/command/note), Language (snippet/command), URL required for link
+- `createItem` server action with Zod discriminated union per type and `{ success, data, error }` return
+- `createItem` query looks up itemType by name and connect-or-creates tags
+- On success: close modal, success toast, `router.refresh()` so the new row appears
+- On error: per-field errors + error toast, modal stays open
+- Content textarea has `max-h-64` so the dialog stays in the viewport when content auto-grows
+- Vitest coverage (auth, title required, link URL validation, type-not-found, snippet success, link success)
+
+#### References
+- `context/features/item-create-spec.md`
+- `src/actions/items.ts`, `src/actions/items.test.ts`
+- `src/components/items/item-create-dialog.tsx`
+- `src/components/dashboard/top-bar.tsx`
+- `src/components/ui/select.tsx`
+- `src/lib/db/items.ts` (added `createItem`)
