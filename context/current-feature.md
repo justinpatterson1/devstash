@@ -1,23 +1,13 @@
-# Current Feature: Item Delete
+# Current Feature
 
 ## Status
-In Progress
+Not Started
 
 ## Goals
-- Delete button in the drawer's action bar opens a shadcn `AlertDialog` confirmation
-- Confirm triggers the server action; Cancel closes the dialog with no change
-- On success: close the drawer, show success toast, refresh card lists
-- On error: show error toast, leave the drawer open
-- New `deleteItem(itemId)` server action in `src/actions/items.ts` with `{ success, error }` return
-- New `deleteItem(userId, itemId)` query function in `src/lib/db/items.ts` with ownership check
-- `router.refresh()` after delete so dashboard and items list pages reflect the removal
-- Vitest coverage for the server action (auth, ownership miss, success)
+<!-- Bullet points of what success looks like -->
 
 ## Notes
-- Drawer Delete button is currently display-only — wire it up to open the dialog
-- Use shadcn `AlertDialog` for confirmation (install via `npx shadcn@latest add alert-dialog` if missing)
-- Tag join rows and collection memberships are removed via Prisma schema cascade — no extra cleanup needed in the query
-- Auth via `auth()` in the server action; ownership enforced in the query (return `false` if no row matched)
+<!-- Additional context, constraints, or details from spec -->
 
 ---
 
@@ -379,3 +369,25 @@ In Progress
 - `src/components/items/item-drawer.tsx`, `src/components/items/item-drawer-provider.tsx`
 - `src/components/ui/textarea.tsx`
 - `src/lib/db/items.ts` (added `updateItem`)
+
+---
+
+### Item Delete
+- **Status:** Completed
+
+#### Goals
+- Delete button in the drawer opens a shadcn `AlertDialog` confirmation
+- Confirm runs the server action; Cancel closes the dialog
+- On success: close drawer, success toast, `router.refresh()` so dashboard/items lists update
+- On error: error toast, drawer stays open
+- `deleteItem` server action with `{ success, error }` return
+- `deleteItem` query with ownership check; tag/collection joins cascade via Prisma schema
+- Vitest coverage for the action (auth, ownership miss, success)
+- Action bar gains right-padding so the rightmost button isn't hidden by the Sheet's absolute close X
+
+#### References
+- `src/actions/items.ts`, `src/actions/items.test.ts`
+- `src/components/items/item-drawer-delete-dialog.tsx`
+- `src/components/items/item-drawer.tsx`, `src/components/items/item-drawer-provider.tsx`
+- `src/components/ui/alert-dialog.tsx`
+- `src/lib/db/items.ts` (added `deleteItem`)
