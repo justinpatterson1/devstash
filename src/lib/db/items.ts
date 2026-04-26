@@ -294,6 +294,103 @@ export async function deleteItem(
   return result.count > 0;
 }
 
+export type CreateItemData =
+  | {
+      type: "snippet";
+      title: string;
+      description: string | null;
+      tags: string[];
+      content: string | null;
+      language: string | null;
+    }
+  | {
+      type: "prompt";
+      title: string;
+      description: string | null;
+      tags: string[];
+      content: string | null;
+    }
+  | {
+      type: "command";
+      title: string;
+      description: string | null;
+      tags: string[];
+      content: string | null;
+      language: string | null;
+    }
+  | {
+      type: "note";
+      title: string;
+      description: string | null;
+      tags: string[];
+      content: string | null;
+    }
+  | {
+      type: "link";
+      title: string;
+      description: string | null;
+      tags: string[];
+      url: string;
+    };
+
+export async function createItem(
+  userId: string,
+  data: CreateItemData
+): Promise<ItemFull | null> {
+  const itemType = await prisma.itemType.findUnique({
+    where: { name: data.type },
+    select: { id: true },
+  });
+  if (!itemType) return null;
+
+  const item = await prisma.item.create({
+    data: {
+      title: data.title,
+      description: data.description,
+      contentType: data.type,
+      content: "content" in data ? data.content : null,
+      language: "language" in data ? data.language : null,
+      url: "url" in data ? data.url : null,
+      user: { connect: { id: userId } },
+      itemType: { connect: { id: itemType.id } },
+      ...(data.tags.length > 0 && {
+        tags: {
+          create: data.tags.map((name) => ({
+            tag: {
+              connectOrCreate: {
+                where: { name },
+                create: { name },
+              },
+            },
+          })),
+        },
+      }),
+    },
+    include: {
+      itemType: { select: { name: true, icon: true, color: true } },
+      tags: { include: { tag: { select: { name: true } } } },
+      collections: {
+        include: { collection: { select: { id: true, name: true } } },
+      },
+    },
+  });
+
+  return {
+    ...mapItem(item),
+    content: item.content,
+    url: item.url,
+    fileUrl: item.fileUrl,
+    fileName: item.fileName,
+    fileSize: item.fileSize,
+    language: item.language,
+    createdAt: item.createdAt,
+    collections: item.collections.map((ic) => ({
+      id: ic.collection.id,
+      name: ic.collection.name,
+    })),
+  };
+}
+
 export async function getItemsByType(
   userId: string,
   typeName: string
