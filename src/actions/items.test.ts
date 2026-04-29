@@ -269,6 +269,68 @@ describe("createItem action", () => {
     });
   });
 
+  it("creates an image, validating fileUrl/fileName/fileSize", async () => {
+    mockAuth.mockResolvedValue(authedSession());
+    const created: ItemFull = {
+      id: "new3",
+      title: "Logo",
+      description: null,
+      isFavorite: false,
+      isPinned: false,
+      tags: [],
+      typeIcon: "Image",
+      typeColor: "#fff",
+      typeName: "image",
+      updatedAt: new Date(),
+      content: null,
+      url: null,
+      fileUrl: "https://pub-xxx.r2.dev/users/user1/image/abc.png",
+      fileName: "logo.png",
+      fileSize: 4096,
+      language: null,
+      createdAt: new Date(),
+      collections: [],
+    };
+    mockCreateItemQuery.mockResolvedValue(created);
+    const result = await createItem({
+      type: "image",
+      title: "Logo",
+      description: "",
+      tags: [],
+      fileUrl: "https://pub-xxx.r2.dev/users/user1/image/abc.png",
+      fileName: "logo.png",
+      fileSize: 4096,
+    });
+    expect(result).toEqual({ success: true, data: created });
+    expect(mockCreateItemQuery).toHaveBeenCalledWith(
+      "user1",
+      expect.objectContaining({
+        type: "image",
+        fileName: "logo.png",
+        fileSize: 4096,
+      })
+    );
+  });
+
+  it("rejects file items with invalid fileUrl or non-positive size", async () => {
+    mockAuth.mockResolvedValue(authedSession());
+    const bad = await createItem({
+      type: "file",
+      title: "Doc",
+      description: "",
+      tags: [],
+      fileUrl: "not a url",
+      fileName: "",
+      fileSize: 0,
+    });
+    expect(bad.success).toBe(false);
+    if (!bad.success) {
+      expect(bad.fieldErrors?.fileUrl).toBeDefined();
+      expect(bad.fieldErrors?.fileName).toBeDefined();
+      expect(bad.fieldErrors?.fileSize).toBeDefined();
+    }
+  });
+
   it("creates a link, validating the URL and ignoring content/language fields", async () => {
     mockAuth.mockResolvedValue(authedSession());
     const created: ItemFull = {

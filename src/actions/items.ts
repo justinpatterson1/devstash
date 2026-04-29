@@ -104,6 +104,8 @@ const languageField = z
   .nullable()
   .default(null);
 const urlField = z.url("Must be a valid URL");
+const fileNameField = z.string().trim().min(1, "File name is required");
+const fileSizeField = z.number().int().positive("Invalid file size");
 
 const createItemSchema = z.discriminatedUnion("type", [
   z.object({
@@ -142,6 +144,24 @@ const createItemSchema = z.discriminatedUnion("type", [
     description: descriptionField,
     tags: tagsField,
     url: urlField,
+  }),
+  z.object({
+    type: z.literal("file"),
+    title: titleField,
+    description: descriptionField,
+    tags: tagsField,
+    fileUrl: urlField,
+    fileName: fileNameField,
+    fileSize: fileSizeField,
+  }),
+  z.object({
+    type: z.literal("image"),
+    title: titleField,
+    description: descriptionField,
+    tags: tagsField,
+    fileUrl: urlField,
+    fileName: fileNameField,
+    fileSize: fileSizeField,
   }),
 ]);
 

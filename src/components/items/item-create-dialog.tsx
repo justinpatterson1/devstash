@@ -25,9 +25,17 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { CodeEditor } from "@/components/code-editor";
+import { FileUpload, type UploadedFile } from "@/components/file-upload";
 import { createItem, type CreateItemInput } from "@/actions/items";
 
-type ItemType = "snippet" | "prompt" | "command" | "note" | "link";
+type ItemType =
+  | "snippet"
+  | "prompt"
+  | "command"
+  | "note"
+  | "link"
+  | "file"
+  | "image";
 
 const TYPES: { value: ItemType; label: string }[] = [
   { value: "snippet", label: "Snippet" },
@@ -35,6 +43,8 @@ const TYPES: { value: ItemType; label: string }[] = [
   { value: "command", label: "Command" },
   { value: "note", label: "Note" },
   { value: "link", label: "Link" },
+  { value: "file", label: "File" },
+  { value: "image", label: "Image" },
 ];
 
 const TYPES_WITH_CONTENT: ReadonlySet<ItemType> = new Set([
@@ -47,6 +57,7 @@ const TYPES_WITH_LANGUAGE: ReadonlySet<ItemType> = new Set([
   "snippet",
   "command",
 ]);
+const TYPES_WITH_UPLOAD: ReadonlySet<ItemType> = new Set(["file", "image"]);
 
 function parseTags(input: string): string[] {
   return input
@@ -66,6 +77,7 @@ export function ItemCreateDialog() {
   const [content, setContent] = useState("");
   const [language, setLanguage] = useState("");
   const [url, setUrl] = useState("");
+  const [upload, setUpload] = useState<UploadedFile | null>(null);
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, string[]> | null
   >(null);
@@ -78,6 +90,13 @@ export function ItemCreateDialog() {
     setContent("");
     setLanguage("");
     setUrl("");
+    setUpload(null);
+    setFieldErrors(null);
+  }
+
+  function handleTypeChange(next: ItemType) {
+    setType(next);
+    setUpload(null);
     setFieldErrors(null);
   }
 
@@ -100,6 +119,17 @@ export function ItemCreateDialog() {
         return { type, title, description, tags, content };
       case "link":
         return { type, title, description, tags, url };
+      case "file":
+      case "image":
+        return {
+          type,
+          title,
+          description,
+          tags,
+          fileUrl: upload?.url ?? "",
+          fileName: upload?.name ?? "",
+          fileSize: upload?.size ?? 0,
+        };
     }
   }
 
@@ -124,10 +154,12 @@ export function ItemCreateDialog() {
   const showContent = TYPES_WITH_CONTENT.has(type);
   const showLanguage = TYPES_WITH_LANGUAGE.has(type);
   const showUrl = type === "link";
+  const showUpload = TYPES_WITH_UPLOAD.has(type);
   const submitDisabled =
     isPending ||
     title.trim().length === 0 ||
-    (type === "link" && url.trim().length === 0);
+    (type === "link" && url.trim().length === 0) ||
+    (showUpload && !upload);
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -151,7 +183,7 @@ export function ItemCreateDialog() {
           <FieldRow label="Type">
             <Select
               value={type}
-              onValueChange={(v) => setType(v as ItemType)}
+              onValueChange={(v) => handleTypeChange(v as ItemType)}
             >
               <SelectTrigger className="w-full">
                 <SelectValue />
@@ -234,6 +266,21 @@ export function ItemCreateDialog() {
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
                 placeholder="typescript"
+              />
+            </FieldRow>
+          )}
+
+          {showUpload && (
+            <FieldRow
+              label={type === "image" ? "Image" : "File"}
+              error={
+                fieldErrors?.fileUrl?.[0] ?? fieldErrors?.fileName?.[0]
+              }
+            >
+              <FileUpload
+                kind={type === "image" ? "image" : "file"}
+                value={upload}
+                onChange={setUpload}
               />
             </FieldRow>
           )}
