@@ -1,24 +1,13 @@
-# Current Feature: File & Image Upload (Cloudflare R2)
+# Current Feature
 
 ## Status
-In Progress
+Not Started
 
 ## Goals
-- Upload API route that streams to Cloudflare R2
-- `FileUpload` component with drag-and-drop and progress indicator
-- Wire `FileUpload` into the create item modal for `file` and `image` types
-- Image preview for images; file metadata (name, size) for files
-- Delete the R2 object when the item is deleted
-- Download proxy API route to serve files without CORS issues
-- Download button in `ItemDrawer` for file types
-- All Prisma access stays in `src/lib/db/items.ts`
+<!-- Bullet points of what success looks like -->
 
 ## Notes
-- Spec: `context/features/file-image-spec.md`
-- Image limits: 5 MB; `.png .jpg .jpeg .gif .webp .svg` (`image/png|jpeg|gif|webp|svg+xml`)
-- File limits: 10 MB; `.pdf .txt .md .json .yaml/.yml .xml .csv .toml .ini` (`application/pdf`, `text/plain`, `text/markdown`, `application/json`, `application/x-yaml`/`text/yaml`, `application/xml`/`text/xml`, `text/csv`, `application/toml`, `text/plain` for `.ini`)
-- Validate type and size on both client and server
-- Object deletion must run when an item is deleted (extend `deleteItem` flow, not a separate cleanup job)
+<!-- Additional context, constraints, or details from spec -->
 
 ---
 
@@ -447,3 +436,31 @@ In Progress
 - `src/components/items/item-drawer.tsx`
 - `src/components/items/item-drawer-edit.tsx`
 - `src/components/items/item-create-dialog.tsx`
+
+---
+
+### File & Image Upload (Cloudflare R2)
+- **Status:** Completed
+
+#### Goals
+- New `POST /api/upload` route streams multipart payloads to R2 (auth + per-kind validation)
+- New `GET /api/files/[id]` proxy streams the R2 object with `Content-Disposition: attachment` after ownership check
+- `FileUpload` component with drag-and-drop, XHR progress, abort, and inline preview/metadata
+- Shared `file-constraints` lib (MIME, extension, size limits) used on both client and server
+- `r2.ts` lib wraps `@aws-sdk/client-s3` with R2 endpoint config, key builder, and `keyFromPublicUrl`
+- `createItem` action and `CreateItemData` extended with `file` and `image` discriminated cases
+- `deleteItem` query also deletes the underlying R2 object (logs but does not fail the request on R2 error)
+- `ItemCreateDialog` adds File and Image types and wires `FileUpload`; submit blocked until upload completes
+- `ItemDrawer` renders inline image preview for image type and a download button for file type
+- `.env.example` documents the R2 env vars
+- Vitest covers `validateUpload` (size, MIME, extension fallback) and the new image/file action paths
+
+#### References
+- `context/features/file-image-spec.md`
+- `src/lib/file-constraints.ts`, `src/lib/file-constraints.test.ts`
+- `src/lib/r2.ts`
+- `src/app/api/upload/route.ts`, `src/app/api/files/[id]/route.ts`
+- `src/components/file-upload.tsx`
+- `src/actions/items.ts`, `src/actions/items.test.ts`
+- `src/lib/db/items.ts`
+- `src/components/items/item-create-dialog.tsx`, `src/components/items/item-drawer.tsx`
