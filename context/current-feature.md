@@ -1,13 +1,24 @@
-# Current Feature
+# Current Feature: File & Image Upload (Cloudflare R2)
 
 ## Status
-Not Started
+In Progress
 
 ## Goals
-<!-- Bullet points of what success looks like -->
+- Upload API route that streams to Cloudflare R2
+- `FileUpload` component with drag-and-drop and progress indicator
+- Wire `FileUpload` into the create item modal for `file` and `image` types
+- Image preview for images; file metadata (name, size) for files
+- Delete the R2 object when the item is deleted
+- Download proxy API route to serve files without CORS issues
+- Download button in `ItemDrawer` for file types
+- All Prisma access stays in `src/lib/db/items.ts`
 
 ## Notes
-<!-- Additional context, constraints, or details from spec -->
+- Spec: `context/features/file-image-spec.md`
+- Image limits: 5 MB; `.png .jpg .jpeg .gif .webp .svg` (`image/png|jpeg|gif|webp|svg+xml`)
+- File limits: 10 MB; `.pdf .txt .md .json .yaml/.yml .xml .csv .toml .ini` (`application/pdf`, `text/plain`, `text/markdown`, `application/json`, `application/x-yaml`/`text/yaml`, `application/xml`/`text/xml`, `text/csv`, `application/toml`, `text/plain` for `.ini`)
+- Validate type and size on both client and server
+- Object deletion must run when an item is deleted (extend `deleteItem` flow, not a separate cleanup job)
 
 ---
 

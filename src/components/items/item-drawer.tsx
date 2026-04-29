@@ -5,6 +5,7 @@ import {
   Pin,
   Copy,
   Pencil,
+  Download,
   Code,
   Sparkles,
   StickyNote,
@@ -22,7 +23,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { CodeEditor } from "@/components/code-editor";
 import { ItemDrawerEdit } from "@/components/items/item-drawer-edit";
 import { ItemDrawerDeleteDialog } from "@/components/items/item-drawer-delete-dialog";
@@ -293,15 +294,28 @@ function ContentBlock({ item }: { item: ItemFull }) {
   }
 
   if (item.fileUrl) {
+    const isImage = item.typeName.toLowerCase() === "image";
+    if (isImage) {
+      return (
+        <Section label="Image">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={item.fileUrl}
+            alt={item.fileName ?? item.title}
+            className="max-h-96 w-full rounded-md border border-border object-contain"
+          />
+        </Section>
+      );
+    }
     return (
       <Section label="File">
         <a
-          href={item.fileUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="text-xs text-primary underline break-all"
+          href={`/api/files/${item.id}`}
+          download={item.fileName ?? undefined}
+          className={buttonVariants({ variant: "outline", size: "sm" })}
         >
-          {item.fileName ?? item.fileUrl}
+          <Download className="size-3.5" />
+          Download {item.fileName ?? "file"}
         </a>
       </Section>
     );

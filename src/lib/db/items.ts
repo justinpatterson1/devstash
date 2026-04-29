@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { deleteObject, keyFromPublicUrl } from "@/lib/r2";
 
 export type ItemWithDetails = {
   id: string;
@@ -288,10 +289,26 @@ export async function deleteItem(
   userId: string,
   itemId: string
 ): Promise<boolean> {
-  const result = await prisma.item.deleteMany({
+  const item = await prisma.item.findFirst({
     where: { id: itemId, userId },
+    select: { id: true, fileUrl: true },
   });
-  return result.count > 0;
+  if (!item) return false;
+
+  await prisma.item.delete({ where: { id: item.id } });
+
+  if (item.fileUrl) {
+    const key = keyFromPublicUrl(item.fileUrl);
+    if (key) {
+      try {
+        await deleteObject(key);
+      } catch (err) {
+        console.error("Failed to delete R2 object", { key, err });
+      }
+    }
+  }
+
+  return true;
 }
 
 export type CreateItemData =
@@ -331,6 +348,24 @@ export type CreateItemData =
       description: string | null;
       tags: string[];
       url: string;
+    }
+  | {
+      type: "file";
+      title: string;
+      description: string | null;
+      tags: string[];
+      fileUrl: string;
+      fileName: string;
+      fileSize: number;
+    }
+  | {
+      type: "image";
+      title: string;
+      description: string | null;
+      tags: string[];
+      fileUrl: string;
+      fileName: string;
+      fileSize: number;
     };
 
 export async function createItem(
@@ -351,6 +386,9 @@ export async function createItem(
       content: "content" in data ? data.content : null,
       language: "language" in data ? data.language : null,
       url: "url" in data ? data.url : null,
+      fileUrl: "fileUrl" in data ? data.fileUrl : null,
+      fileName: "fileName" in data ? data.fileName : null,
+      fileSize: "fileSize" in data ? data.fileSize : null,
       user: { connect: { id: userId } },
       itemType: { connect: { id: itemType.id } },
       ...(data.tags.length > 0 && {
