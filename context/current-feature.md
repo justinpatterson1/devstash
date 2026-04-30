@@ -1,18 +1,13 @@
-# Current Feature: Image Gallery View
+# Current Feature
 
 ## Status
-In Progress
+Not Started
 
 ## Goals
-- Add an image-specific thumbnail card that replaces the regular `ItemCard` for image items
-- Render the image list view as a 3-column gallery grid
-- Thumbnails use a 16:9 aspect ratio (`aspect-video`) with `object-cover`
-- Subtle hover zoom: 5% scale, 300ms transition
+<!-- Bullet points of what success looks like -->
 
 ## Notes
-- Spec: `context/features/image-display-spec.md`
-- Scope is the image type only — other item type list views keep the existing 2-column `ItemCard` grid
-- Thumbnail card should still open the existing `ItemDrawer` (preserve click behavior + drawer interactions)
+<!-- Additional context, constraints, or details from spec -->
 
 ---
 
@@ -469,3 +464,21 @@ In Progress
 - `src/actions/items.ts`, `src/actions/items.test.ts`
 - `src/lib/db/items.ts`
 - `src/components/items/item-create-dialog.tsx`, `src/components/items/item-drawer.tsx`
+
+---
+
+### Image Gallery View
+- **Status:** Completed
+
+#### Goals
+- New `ImageCard` thumbnail component (16:9 `aspect-video`, `object-cover`, 5%/300ms hover zoom, `loading="lazy"`)
+- Image list view renders a responsive 3-column gallery (`grid-cols-2 md:grid-cols-3`)
+- Other item types keep the existing 2-column `ItemCard` grid
+- Thumbnail opens the existing `ItemDrawer` via `useItemDrawer().openItem`
+- `ItemWithDetails` and `mapItem` extended with `fileUrl` so list cards can render thumbnails directly
+
+#### References
+- `context/features/image-display-spec.md`
+- `src/components/items/image-card.tsx`
+- `src/app/items/[type]/page.tsx`
+- `src/lib/db/items.ts`
