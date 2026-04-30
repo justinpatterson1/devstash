@@ -12,6 +12,7 @@ export type ItemWithDetails = {
   typeColor: string;
   typeName: string;
   updatedAt: Date;
+  fileUrl: string | null;
 };
 
 export type DashboardStats = {
@@ -28,6 +29,7 @@ function mapItem(item: {
   isFavorite: boolean;
   isPinned: boolean;
   updatedAt: Date;
+  fileUrl: string | null;
   itemType: { name: string; icon: string; color: string };
   tags: { tag: { name: string } }[];
 }): ItemWithDetails {
@@ -42,6 +44,7 @@ function mapItem(item: {
     typeColor: item.itemType.color,
     typeName: item.itemType.name,
     updatedAt: item.updatedAt,
+    fileUrl: item.fileUrl,
   };
 }
 
