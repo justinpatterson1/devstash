@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { getItemsByType, getItemTypeByName } from "@/lib/db/items";
 import { ItemCard } from "@/components/items/item-card";
+import { ImageCard } from "@/components/items/image-card";
 
 const VALID_TYPES = new Set([
   "snippet",
@@ -55,6 +56,12 @@ export default async function ItemsTypePage({
         <p className="text-sm text-muted-foreground">
           No {itemType.name}s yet.
         </p>
+      ) : type === "image" ? (
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+          {items.map((item) => (
+            <ImageCard key={item.id} item={item} />
+          ))}
+        </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {items.map((item) => (
