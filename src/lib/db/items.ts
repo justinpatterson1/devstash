@@ -11,8 +11,11 @@ export type ItemWithDetails = {
   typeIcon: string;
   typeColor: string;
   typeName: string;
+  createdAt: Date;
   updatedAt: Date;
   fileUrl: string | null;
+  fileName: string | null;
+  fileSize: number | null;
 };
 
 export type DashboardStats = {
@@ -28,8 +31,11 @@ function mapItem(item: {
   description: string | null;
   isFavorite: boolean;
   isPinned: boolean;
+  createdAt: Date;
   updatedAt: Date;
   fileUrl: string | null;
+  fileName: string | null;
+  fileSize: number | null;
   itemType: { name: string; icon: string; color: string };
   tags: { tag: { name: string } }[];
 }): ItemWithDetails {
@@ -43,8 +49,11 @@ function mapItem(item: {
     typeIcon: item.itemType.icon,
     typeColor: item.itemType.color,
     typeName: item.itemType.name,
+    createdAt: item.createdAt,
     updatedAt: item.updatedAt,
     fileUrl: item.fileUrl,
+    fileName: item.fileName,
+    fileSize: item.fileSize,
   };
 }
 

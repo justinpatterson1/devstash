@@ -1,13 +1,21 @@
-# Current Feature
+# Current Feature: File List View
 
 ## Status
-Not Started
+In Progress
 
 ## Goals
-<!-- Bullet points of what success looks like -->
+- Update `/items/files` to display as a single-column list (like Google Drive/Dropbox) instead of grid cards
+- Each row shows: file icon (by extension), file name, file size, upload date, download button
+- Row hover highlight
+- Click row opens `ItemDrawer`
+- Download button triggers direct download (stop propagation so it doesn't open the drawer)
+- Responsive: stack info vertically on mobile
 
 ## Notes
-<!-- Additional context, constraints, or details from spec -->
+- Spec: `context/features/file-display-spec.md`
+- Only applies to the files type route; other types keep their existing layouts
+- Reuse existing `ItemDrawer` open mechanism (`useItemDrawer().openItem`) like the image gallery does
+- Download already has a working endpoint at `GET /api/files/[id]` (streams with `Content-Disposition: attachment`)
 
 ---
 
