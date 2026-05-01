@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { getItemsByType, getItemTypeByName } from "@/lib/db/items";
 import { ItemCard } from "@/components/items/item-card";
 import { ImageCard } from "@/components/items/image-card";
+import { FileRow } from "@/components/items/file-row";
 
 const VALID_TYPES = new Set([
   "snippet",
@@ -60,6 +61,12 @@ export default async function ItemsTypePage({
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           {items.map((item) => (
             <ImageCard key={item.id} item={item} />
+          ))}
+        </div>
+      ) : type === "file" ? (
+        <div className="flex flex-col gap-1.5">
+          {items.map((item) => (
+            <FileRow key={item.id} item={item} />
           ))}
         </div>
       ) : (
