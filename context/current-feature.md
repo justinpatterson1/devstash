@@ -1,21 +1,13 @@
-# Current Feature: File List View
+# Current Feature
 
 ## Status
-In Progress
+Not Started
 
 ## Goals
-- Update `/items/files` to display as a single-column list (like Google Drive/Dropbox) instead of grid cards
-- Each row shows: file icon (by extension), file name, file size, upload date, download button
-- Row hover highlight
-- Click row opens `ItemDrawer`
-- Download button triggers direct download (stop propagation so it doesn't open the drawer)
-- Responsive: stack info vertically on mobile
+<!-- Bullet points of what success looks like -->
 
 ## Notes
-- Spec: `context/features/file-display-spec.md`
-- Only applies to the files type route; other types keep their existing layouts
-- Reuse existing `ItemDrawer` open mechanism (`useItemDrawer().openItem`) like the image gallery does
-- Download already has a working endpoint at `GET /api/files/[id]` (streams with `Content-Disposition: attachment`)
+<!-- Additional context, constraints, or details from spec -->
 
 ---
 
@@ -488,5 +480,24 @@ In Progress
 #### References
 - `context/features/image-display-spec.md`
 - `src/components/items/image-card.tsx`
+- `src/app/items/[type]/page.tsx`
+- `src/lib/db/items.ts`
+
+---
+
+### File List View
+- **Status:** Completed
+
+#### Goals
+- Replace grid-card layout on `/items/file` with a single-column list (Google Drive / Dropbox style)
+- Each row: extension-derived lucide icon, title, file size, upload date, download button
+- Row hover highlight; row click opens existing `ItemDrawer` via `useItemDrawer().openItem`
+- Download anchor uses `stopPropagation` so it triggers `/api/files/[id]` direct download without opening the drawer
+- Responsive: size and date stack under the title on mobile, columnar on `sm:` and up
+- `ItemWithDetails` and `mapItem` extended with `createdAt`, `fileName`, and `fileSize`
+
+#### References
+- `context/features/file-display-spec.md`
+- `src/components/items/file-row.tsx`
 - `src/app/items/[type]/page.tsx`
 - `src/lib/db/items.ts`
